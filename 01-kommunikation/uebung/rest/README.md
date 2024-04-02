@@ -11,7 +11,7 @@ den Spring Boot Initializr. Rufen sie hierfür die folgende URL auf: https://sta
 2. Passen sie die Projekt Metadaten nach ihren Bedürfnissen an. Wählen sie Java als Sprache und Maven als Build-Tool.
 
 3. Fügen sie die folgenden Dependencies hinzu:
-  * Jersey (JAX-RS)
+  * Spring Web
 
 4. Generieren (`mvnw idea:idea` oder `eclipse:eclipse`) und laden sie das Projekt und speichern sie es in ihrem Arbeitsbereich.
 
@@ -20,11 +20,13 @@ den Spring Boot Initializr. Rufen sie hierfür die folgende URL auf: https://sta
 
 ## Aufgaben
 
-### Aufgabe 1: REST-API mit JAX-RS erstellen
+### Aufgabe 1: REST-API mit Spring MVC erstellen
 
-Bei dieser Aufgabe geht es darum, eine einfache REST-Schnittstelle aufzubauen. Wir verwenden hierfür JAX-RS. Ein Getting Started finden sie hier: https://jersey.github.io/documentation/latest/getting-started.html
+Bei dieser Aufgabe geht es darum, eine einfache REST-Schnittstelle aufzubauen. Wir verwenden hierfür Spring MVC mit Spring Boot. Ein Getting Started finden sie hier: https://spring.io/guides/gs/spring-boot/
 
-(1) Entwerfen sie zunächst eine einfache Datenklasse um Bücher zu repräsentieren. Die Klasse soll mindestens die Felder `title`, `isbn` und `author` enthalten. Zusätzlich soll die Klasse beim Deserialisieren unbekannte
+(1) Initiale Anwendungslogik erstellen:
+
+(1.1) Entwerfen sie zunächst eine einfache Datenklasse um Bücher zu repräsentieren. Die Klasse soll mindestens die Felder `title`, `isbn` und `author` enthalten. Zusätzlich soll die Klasse beim Deserialisieren unbekannte
 JSON Felder ignorieren.
 
 ```java
@@ -38,128 +40,127 @@ public class Book {
 }
 ```
 
-(2) Fügen sie nun eine REST Resource Klasse hinzu. Diese dient als Haupteinstiegspunkt für das Book API. Das API soll unter dem Pfad `/api/books` erreichbar sein und als Media-Type `application/json` produzieren.
+(1.2) Implementieren sie eine Bücherverwaltung, die einige Beispielbücher anlegt und erlaubt die Bücher abzufragen:
 
 ```java
 @Component
-@Path("/api/books")
-@Produces(MediaType.APPLICATION_JSON)
-public class BookResource {
+public class Bookshelf {
+
+    private final Set<Book> books = new HashSet<>();
+
+    @PostConstruct
+    public void initialize() {
+        books.add(new Book("The Hitchhiker's Guide to the Galaxy", "Douglas Adams", "0345391802"));
+        books.add(new Book("The Martian", "Andy Weir", "0553418025"));
+        books.add(new Book("Guards! Guards!", "Terry Pratchett", "0062225758"));
+        books.add(new Book("Alice in Wonderland", "Lewis Carroll", "3458317422"));
+        books.add(new Book("Life, the Universe and Everything", "Douglas Adams", "0345391829"));
+    }
+
+    public Collection<Book> findByTitle(String title) {
+        if (StringUtils.isEmpty(title)) {
+            return books;
+        } else {
+            return books
+                    .stream()
+                    .filter((Book b) -> b.getTitle().equalsIgnoreCase(title))
+                    .collect(Collectors.toList());
+        }
+    }
+
+    public Book findByIsbn(String isbn) {
+        return books
+                .stream()
+                .filter((Book b) -> b.getIsbn().equals(isbn))
+                .findFirst()
+                .orElseThrow(() -> new BookNotFoundException(isbn));
+    }
+}
+```
+
+Zusätzlich muss noch eine Fehlermeldung definiert werden: 
+```java
+public class BookNotFoundException extends RuntimeException {
+    public BookNotFoundException(String isbn) {
+        super("Book with ISBN " + isbn + " not found.");
+    }
+}
+```
+
+(2) Fügen sie nun eine REST Controller Klasse hinzu. Diese dient als Haupteinstiegspunkt für das Book API. Das API soll unter dem Pfad `/api/books` erreichbar sein und als Media-Type `application/json` produzieren.
+
+```java
+@RestController
+@RequestMapping("/api/books")
+public class BookController {
   // implement methods
 }
 ```
 
-(3) Fügen sie der REST Resource nun entsprechende Methoden zum Abruf von Büchern hinzu. Es soll die Möglichkeit geben alle Bücher per `GET /api/books` abzurufen sowie einzelne Bücher mittels ISBN per `GET /api/books/{isbn}`. Implementieren sie die Business-Logik rudimentär (statische Liste statt DB). Achten sie bei
+(3) REST Interface erstellen:
+
+(3.1) Fügen sie der REST Resource nun entsprechende Methoden zum Abruf von Büchern hinzu. Es soll die Möglichkeit geben alle Bücher per `GET /api/books` abzurufen sowie einzelne Bücher mittels ISBN per `GET /api/books/{isbn}`. Implementieren sie die Business-Logik rudimentär (statische Liste statt DB). Achten sie bei
 der Implementierung auf die Verwendung der korrekten HTTP Verben und Status-Codes, z.B. für den Fall das ein Buch per ISBN nicht gefunden wurde.
 
 ```java
-    @GET
-    public Response books(@QueryParam("title") String title) {
-        Collection<Book> books = bookshelf.findByTitle(title);
-        return Response.ok(books).build();
+    @GetMapping
+    public Collection<Book> books(
+            @RequestParam(value = "title", required = false, defaultValue = "") String title) {
+        return bookshelf.findByTitle(title);
     }
 
-    @GET
-    @Path("/{isbn}")
-    public Response byIsbn(@PathParam("isbn") String isbn) {
-        Book book = bookshelf.findByIsbn(isbn);
-        return Response.ok(book).build();
+    @GetMapping("/{isbn}")
+    public Book byIsbn(@PathVariable("isbn") String isbn) {
+        return bookshelf.findByIsbn(isbn);
     }
 ```
 
-(4) Implementieren sie eine JAX-RS `ResourceConfig` und registrieren sie die REST Resource Klasse sowie den Jackson JSON Marshaller.
-
+(3.2) Erstellen sie einen Exceptionmapper, damit Java-Exceptions in HTTP-Statuscodes umgewandelt werden:
 ```java
-@Component
-public class BookstoreAPI extends ResourceConfig {
-    public BookstoreAPI() {
-        super();
+@ControllerAdvice
+class BookNotFoundExceptionMapper {
 
-        register(JacksonFeature.class);
-        register(BookResource.class);
-        register(BookExceptionMapper.class);
+    @ResponseBody
+    @ExceptionHandler(BookNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    String bookNotFoundHandler(BookNotFoundException ex) {
+        return ex.getMessage();
     }
 }
 ```
 
-(5) Kompilieren sie den Microservice und führen sie die Applikation aus: `mvnw install spring-boot:run`. 
+(4) Starten Sie die Anwendung mit dem Befehl `mvnw spring-boot:run` (alternativ können sie die Anwendung natürlich aus der IDE heraus starten). 
 Die Anwendung und das REST API sollte nun unter der folgenden URL erreichbar sein: `http://localhost:8080/api/books`.
+
+Testen sie manuell die beiden erstellten Endpunkte mit dem Browser. Probieren sie den Fehler aus dem ExceptionMapper zu provozieren.
 
 ### Aufgabe 2: API Dokumentation
 
-Eine gute REST API braucht Dokumentation bzw. eine Beschreibung der angeboten
-Funktionalität die von Maschinen verarbeitet werden kann.
-
-#### Aufgabe 2.1: WADL Definition hinzufügen
-
-(1) In einem ersten Schritt fügen sie die `WadlResource` Klasse aus dem
-Jersey Modul in der REST API `ResourceConfig` hinzu.
-
-```java
-  register(WadlResource.class);
-```
-
-(2) Starten sie den Microservice und prüfen sie die korrekte Funktionsweise.
-Die WADL Definition sollten unter `http://localhost:8080/application.wadl`
-aufrufbar sein (abhängig von der Jersey Servlet URL).
-
-#### Aufgabe 2.2: Swagger Definition hinzufügen
+Eine gute REST API braucht Dokumentation bzw. eine Beschreibung der angebotenen
+Funktionalität die von Maschinen verarbeitet werden kann. Der Standard hierfür ist OpenAPI (ehemals Swagger).
 
 (1) Fügen sie zunächst in der `pom.xml` die folgenden Dependencies hinzu:
 ```xml
-    <dependency>
-        <groupId>io.swagger</groupId>
-        <artifactId>swagger-jersey2-jaxrs</artifactId>
-        <version>1.5.22</version>
-    </dependency>
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    <version>2.2.0</version>
+</dependency>
 ```
 
-(2) Im nächsten Schritt müssen die Swagger REST Resource Klasse mit der JAX-RS Applikation registriert werden. Siehe https://github.com/swagger-api/swagger-core/wiki/Swagger-Core-Jersey-2.X-Project-Setup-1.5#using-a-custom-application-subclass für weitere Details.
+(2) Annotieren und dokumentieren sie nun die vorhandenen Klassen der REST-API über OpenAPI-Annotationen zusätzlich zu den bereits vorhandenen Spring-Annotationen. Nutzen Sie hierfür die folgenden OpenAPI-Annotationen, eine Beschreibung der Annotationen ist hier zugänglich: https://github.com/swagger-api/swagger-core/wiki/Swagger-2.X---Annotations.
 
-```java
-@Component
-public class BookstoreAPI extends ResourceConfig {
-    // ...
-    register(io.swagger.jaxrs.listing.ApiListingResource.class);
-    register(io.swagger.jaxrs.listing.SwaggerSerializers.class);
-}
-```
+| Swagger-Annotation                 | Code-Element                                                                                                                                    |
+|------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| `@OpenAPIDefinition`               | Metadaten für die gesamte OpenAPI Definition                                                                               |
+| `@Operation`                       | Einzelne Methode der Ressourcen-Klasse                                                                                                          |
+| `@ApiResponses` und `@ApiResponse` | Antworten einer Methode der Ressourcen-Klasse (überlegen Sie sich hier mögliche Fehlersituationen und bilden Sie diese auf http-Status-Codes ab) |
+| `@Schema`                          | Entitäts-Klasse und Properties der Entität                                                                                                      |
 
-(3) Zusätzlich muss Swagger und die Basis-Parameter für das API noch entsprechend konfiguriert werden. Siehe https://github.com/swagger-api/swagger-core/wiki/Swagger-Core-Jersey-2.X-Project-Setup-1.5#using-a-custom-application-subclass für weitere Details.
+(3) Starten Sie die Anwendung nun neu. Die API-Beschreibung sollte nun unter der URL http://localhost:8080/v3/api-docs zugänglich sein.
 
-```java
-@Component
-public class BookstoreAPI extends ResourceConfig {
-    // ...
+(4) Die API-Beschreibung ist nicht nur als JSON verfügbar, sondern kann auch mit der Swagger UI exploriert werden. Öffnen Sie die Swagger UI unter http://localhost:8080/swagger-ui/index.html.
 
-    BeanConfig beanConfig = new BeanConfig();
-    beanConfig.setVersion("1.0.0");
-    beanConfig.setSchemes(new String[]{"http"});
-    beanConfig.setHost("localhost:8080");
-    beanConfig.setPrettyPrint(true);
-    beanConfig.setBasePath("/");
-    beanConfig.setResourcePackage("de.qaware.edu.cc.bookservice");
-    beanConfig.setScan(true);
-
-    // ...
-}
-```
-
-(4) Annotieren und dokumentieren sie nun die vorhandenen Klassen der REST-API über Swagger-Annotationen zusätzlich zu den bereits vorhandenen JAX-RS-Annotationen. Nutzen Sie hierfür die folgenden Swagger-Annotationen, eine Beschreibung der Annotationen ist hier zugänglich: https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X.
-
-| Swagger-Annotation        | Code-Element           |
-| ------------- | ------------- |
-| `@Api`      |Ressourcen-Klasse (REST-Schnittstelle) |
-| `@ApiOperation`      | Methode der Ressourcen-Klasse      |
-| `@ApiResponses` und `@ApiResponse` | Methode der Ressourcen-Klasse (überlegen Sie sich hier mögliche Fehlersituationen und bilden Sie diese auf http-Status-Codes ab)      |
-| `@ApiModel` | Entitäts-Klasse      |
-| `@ApiModelProperty` | Setter-Methoden der Entitätsklasse      |
-
-(5) Starten Sie die Anwendung nun neu. Die API-Beschreibung durch Swagger sollte nun unter der URL http://localhost:8080/swagger.json zugänglich sein.
-
-(6) Starten Sie nun die Swagger UI über Docker.
-Folgen sie den Anweisungen unter https://github.com/swagger-api/swagger-ui/blob/master/docs/usage/installation.md#docker
-Öffnen sie die UI und rufen sie die Swagger JSON URL auf. **Hinweis: sie benötigen einen JAX-RS CORS Filter um die Datei lokal aufrufen zu können.**
 
 ### Kür: REST-API weiter ausbauen
 Bauen Sie die REST-Schnittstelle weiter aus und fügen sie Logik zum Anlegen, Aktualisieren und Löschen von Büchern hinzu:
@@ -182,13 +183,7 @@ Spring Boot
 * https://docs.spring.io/spring-boot/docs/current/reference/html/index.html
 * https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-developing-web-applications.html
 
-JAX-RS
-* https://jersey.github.io/documentation/latest/index.html
-* https://jersey.github.io/documentation/latest/getting-started.html
-* https://dzone.com/articles/using-jax-rs-with-spring-boot-instead-of-mvc
 
-Swagger
+OpenAPI/Swagger
 * http://swagger.io
 * https://github.com/swagger-api/swagger-core
-* http://springfox.github.io/springfox/docs/current/#introduction
-* http://springfox.github.io/springfox/

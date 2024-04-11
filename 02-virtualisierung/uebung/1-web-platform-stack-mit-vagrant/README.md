@@ -15,7 +15,7 @@ Bei dieser Aufgabe geht es darum den Technologie-Stack aus NGINX, PHP und MySQL 
 (1) In einem ersten Schritt legen sie zunächst mit Vagrant eine Ubuntu 20.04 Basis Box an.
 
 ```bash
-$ vagrant init ubuntu/focal64
+$ vagrant init generic/ubuntu2004
 ```
 
 Editieren sie das `Vagrantfile` und weisen sie der virtuellen Maschine anschließend 1024 MB Hauptspeicher zu.

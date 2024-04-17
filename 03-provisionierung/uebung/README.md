@@ -154,7 +154,7 @@ Nutzen Sie auch die folgenden Referenzen:
 ### Schritt 1: Image für Managed Nodes bauen
 
 Erstellen Sie ein Dockerfile für die zu provisionierenden Maschinen / Managed Nodes.
-Diese sollen Ubuntu in Version 22.04 beinhalten und SSH Verbindungen von außen erlauben:
+Diese sollen Ubuntu in Version 24.04 beinhalten und SSH Verbindungen von außen erlauben:
 
 - Legen Sie dafür parallel zu dieser Readme eine Datei mit dem Namen "Dockerfile_Managed_Node" an.
 - Schreiben sie ein Dockerfile, dass die folgenden Shell-Befehle ausführt um den SSH server zu installieren:
@@ -163,9 +163,7 @@ Diese sollen Ubuntu in Version 22.04 beinhalten und SSH Verbindungen von außen 
   apt-get update && apt-get install -y openssh-server
   mkdir /var/run/sshd
   echo 'root:verysecretpassword' | chpasswd
-  sed -i 's/#*PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
-  sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
-  echo "export VISIBLE=now" >> /etc/prof
+  sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
   ```
 
 - Mit dem folgenden Befehl wir der ssh Server dann gestartet:

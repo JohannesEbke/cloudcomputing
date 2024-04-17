@@ -43,7 +43,7 @@ Nutzen Sie hierfür ein einfaches HTML, dass eine "Hello World" Begrüßung ausg
 Legen Sie ein Dockerfile an.
 Führen Sie folgende Schritte aus:
 
-- Nutzen Sie nginx:1.25.4-alpine3.18-slim als Basisimage.
+- Nutzen Sie `nginx:1.25.4-alpine3.18` als Basisimage.
 - Kopieren Sie ihre 'index.html' nach '/usr/share/nginx/html/', indem Sie das Docker Command 'COPY' nutzen.
 - Exponieren Sie den Port 80.
 - Starten Sie nginx über das Command 'nginx'.
@@ -53,7 +53,7 @@ Führen Sie folgende Schritte aus:
 <summary>Hinweis, falls Sie nicht weiterkommen:</summary>
 
 ``` dockerfile
-FROM nginx:1.25.4-alpine3.18-slim
+FROM nginx:1.25.4-alpine3.18
 COPY index.html /usr/share/nginx/html
 EXPOSE 80
 CMD nginx -g 'daemon off;'
@@ -69,7 +69,7 @@ Bauen Sie das Docker Image mit dem Namen cc-nginx und dem Tag v1.
 <summary>Hinweis, falls Sie nicht weiterkommen:</summary>
 
 ``` shell
-docker build . -t cc-nginx:v1
+docker build -t cc-nginx:v1 .
 ```
 
 </details>
@@ -374,7 +374,7 @@ Legen Sie ein Packer Template an.
 Verwenden Sie den Docker Builder von Packer, um ein Nginx Image mit.
 einer eigenen Welcome Seite zu bauen.
 
-Verwenden Sie als Basisimage "nginx:1.23-alpine".
+Verwenden Sie als Basisimage `nginx:1.25.4-alpine3.18`.
 
 Exponieren Sie Port 80 im Image und führen Sie das CMD "nginx -g daemon off;"
 zum Start von Nginx aus.
@@ -406,7 +406,7 @@ Mappen Sie dabei den Containerport 80 auf den Host Port 8080.
 <summary>Hinweis, falls Sie nicht weiterkommen:</summary>
 
 ``` shell
-docker run -d -p 8080:80 packer-nginx:1.0
+docker run --rm -it -p 8080:80 packer-nginx:1.0
 ```
 
 </details>

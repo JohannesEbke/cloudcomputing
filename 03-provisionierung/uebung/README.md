@@ -204,8 +204,8 @@ Erstellen Sie ein Docker Compose File (Datei mit dem Namen "docker-compose.yml" 
 
 - Eine Ansible Control Node startet und dabei:
   - den Service Namen "ansible-node" hat
-  - das fertige Image "willhallonline/ansible:2.9-alpine-3.13" nutzt.
-    In diesem ist Ansible in Version 2.9 mit Python3 verfügbar (siehe <https://hub.docker.com/r/willhallonline/ansible>).
+  - das fertige Image "willhallonline/ansible:2.16.4-alpine-3.18" nutzt.
+    In diesem ist Ansible in Version 2.16 mit Python3 verfügbar (siehe <https://hub.docker.com/r/willhallonline/ansible>).
   - ein Memory Limit von 100 MB hat
   - erst gestartet wird, wenn die Managed Node läuft
 
@@ -214,7 +214,7 @@ Erstellen Sie ein Docker Compose File (Datei mit dem Namen "docker-compose.yml" 
 
   ``` yaml
   ansible-node:
-    image: "willhallonline/ansible:2.9-alpine-3.13"
+    image: "willhallonline/ansible:2.16.4-alpine-3.18"
     networks:
       - cloudcomputing
     depends_on:

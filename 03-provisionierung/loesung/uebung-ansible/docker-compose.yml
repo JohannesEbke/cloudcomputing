@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   managed-node:
     build:
@@ -10,16 +8,16 @@ services:
       - cloudcomputing
     ports:
       - "80"
-    
+
   ansible-node:
-    image: "willhallonline/ansible:2.9-alpine-3.13"
+    image: "willhallonline/ansible:2.16.4-alpine-3.18"
     networks:
       - cloudcomputing
     depends_on:
       - managed-node
     volumes:
-    - "./ansible/hosts:/etc/ansible/hosts"
-    - "./playbooks:/root/playbooks"
+      - "./ansible/hosts:/etc/ansible/hosts"
+      - "./playbooks:/root/playbooks"
 
 networks:
   cloudcomputing:

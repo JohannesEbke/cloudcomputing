@@ -2,7 +2,7 @@
   "builders": [
     {
       "type": "docker",
-      "image": "nginx:1.23-alpine",
+      "image": "nginx:1.25.4-alpine3.18",
       "commit": true,
       "run_command": [ "-d", "-t", "-i", "{{.Image}}", "/bin/sh" ],
       "changes": [

@@ -270,7 +270,7 @@ Legen Sie die Group "server_hosts" an, tragen Sie darin die Managed Node ein, un
   <details>
   <summary>Wenn Sie nicht weiterkommen, können Sie folgenden Codeblock verwenden:</summary>
 
-  ``` toml
+  ``` text
   [server_hosts]
   uebung_managed-node_1
 

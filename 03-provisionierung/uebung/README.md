@@ -218,9 +218,6 @@ Erstellen Sie ein Docker Compose File (Datei mit dem Namen "docker-compose.yml" 
     image: "willhallonline/ansible:2.16.4-alpine-3.18"
     depends_on:
       - managed-node
-    volumes:
-      - "./ansible/hosts:/etc/ansible/hosts"
-      - "./playbooks:/root/playbooks"
   ```
 
   </details>

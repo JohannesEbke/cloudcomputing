@@ -253,7 +253,7 @@ Sie können sowohl über den Service Namen 'managed-node' als auch mit vorangest
 Verifizieren Sie das über
 
 ```shell
-ssh uebung_managed-node_1
+ssh uebung-managed-node-1
 ```
 
 ### Schritt 4: Erste Schritte mit Ansible

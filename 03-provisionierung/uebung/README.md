@@ -142,22 +142,21 @@ Wir wollen:
 - ein Playbook erstellen, dass auf allen 3 Managed Nodes einen Apache Http Server installiert, konfiguriert und startet
 - das Playbook ausführen und die gestarteten Apache Http Server testweise aufrufen
 
-### Hinweis:
-
-Falls Sie nicht weiterkommen, können Sie sich an der Musterlösung orientieren.
-
-Nutzen Sie auch die folgenden Referenzen:
-
-- Docker Compose Syntax: <https://docs.docker.com/compose/compose-file/>
-- Ansible Documentation: <https://docs.ansible.com/ansible/latest/index.html>
+> [!TIP]
+> Falls Sie nicht weiterkommen, können Sie sich an der Musterlösung orientieren.
+>
+> Nutzen Sie auch die folgenden Referenzen:
+>
+> - Docker Compose Syntax: <https://docs.docker.com/compose/compose-file/>
+> - Ansible Documentation: <https://docs.ansible.com/ansible/latest/index.html>
 
 ### Schritt 1: Image für Managed Nodes bauen
 
 Erstellen Sie ein Dockerfile für die zu provisionierenden Maschinen / Managed Nodes.
-Diese sollen Ubuntu in Version 24.04 beinhalten und SSH Verbindungen von außen erlauben:
+Diese sollen Ubuntu in Version 24.04 beinhalten und SSH-Verbindungen von außen erlauben:
 
 - Legen Sie dafür parallel zu dieser Readme eine Datei mit dem Namen 'Dockerfile_Managed_Node' an.
-- Schreiben sie ein Dockerfile, dass die folgenden Shell-Befehle ausführt um den SSH server zu installieren:
+- Schreiben sie ein Dockerfile, dass die folgenden Shell-Befehle ausführt um den SSH-Server zu installieren:
 
   ``` shell
   apt-get update && apt-get install -y openssh-server
@@ -166,7 +165,7 @@ Diese sollen Ubuntu in Version 24.04 beinhalten und SSH Verbindungen von außen 
   sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
   ```
 
-- Mit dem folgenden Befehl wir der ssh Server dann gestartet:
+- Mit dem folgenden Befehl wird der ssh Server dann gestartet:
 
   ``` shell
   /usr/sbin/sshd -D

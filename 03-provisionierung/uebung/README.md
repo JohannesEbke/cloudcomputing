@@ -12,11 +12,11 @@ Wir wollen in dieser Übung:
 
 ### Schritt 1: Docker Image nutzen und Container starten
 
-Nginx ist ein Open Source Reverse Proxy.
+NGINX ist ein Open Source Reverse Proxy.
 Unter <https://hub.docker.com/_/nginx> ist dokumentiert, wie das offizielle Docker Image
 genutzt werden kann.
 
-Schauen Sie sich die Doku an und starten Sie über die Console einen Nginx Container.
+Schauen Sie sich die Doku an und starten Sie über die Console einen NGINX Container.
 
 Sorgen Sie dafür, dass der Port '80' auch auf Ihrem Host exponiert wird.
 
@@ -46,8 +46,8 @@ Führen Sie folgende Schritte aus:
 - Nutzen Sie 'nginx:1.25.4-alpine3.18' als Basisimage.
 - Kopieren Sie ihre 'index.html' nach '/usr/share/nginx/html/', indem Sie das Docker Command 'COPY' nutzen.
 - Exponieren Sie den Port '80'.
-- Starten Sie nginx über das Command 'nginx'.
-  Achten Sie darauf, -g 'daemon off;' beim Start mit anzugeben, damit Nginx nicht direkt nach dem Containerstart beendet wird, sondern im Vordergrund läuft.
+- Starten Sie NGINX über das Command 'nginx'.
+  Achten Sie darauf, -g 'daemon off;' beim Start mit anzugeben, damit NGINX nicht direkt nach dem Containerstart beendet wird, sondern im Vordergrund läuft.
 
 <details>
 <summary>Hinweis, falls Sie nicht weiterkommen:</summary>
@@ -90,13 +90,13 @@ docker run --rm -it -p 8080:80 cc-nginx:v1
 
 </details>
 
-Rufen Sie den gestarteten nginx Container unter <http://localhost:8080> auf.
+Rufen Sie den gestarteten NGINX Container unter <http://localhost:8080> auf.
 
 ### Schritt 5: Container über Docker Compose starten
 
 Wir nutzen jetzt unser Docker-Image und starten dieses über Docker Compose.
 
-Legen Sie hierfür die Datei 'docker-compose.yml' an, die eine Nginx Instanz startet und dabei:
+Legen Sie hierfür die Datei 'docker-compose.yml' an, die eine NGINX Instanz startet und dabei:
 
 - den Service Namen 'cc-nginx' hat
 - das Image auf Basis des in Schritt 1 erstellen Dockerfiles baut
@@ -121,10 +121,10 @@ services:
 
 Probieren Sie weitere Docker und Docker Compose Commands aus.
 
-- Skalieren Sie den nginx auf 3 Instanzen
+- Skalieren Sie den NGINX auf 3 Instanzen
 - Öffnen Sie eine Shell im laufenden Container
 - Editieren sie die index.html im Container
-- Schauen Sie in die nginx Logs
+- Schauen Sie in die NGINX Logs
 - ...
 
 ## Übung 2: Provisionierung mit Ansible
@@ -335,14 +335,14 @@ Führen Sie das Playbook auf der Ansible Control Node aus:
 ansible-playbook /root/playbooks/install-apache.yml
 ```
 
-### Schritt 6: Aufruf des gestarteten Webservers
+### Schritt 7: Aufruf des gestarteten Webservers
 
 Finden Sie über `docker ps` heraus, unter welchem Port der gestartete Webserver auf Ihrem Host erreichbar ist.
 Welcher Port leitet Requests an den exponierten Port '80' des Containers weiter?
 
 Rufen Sie in Ihrem Browser <http://localhost:&#60;port&#62;> für den spezifischen Port auf und verifizieren Sie, dass Ihre index.html angezeigt wird.
 
-### Schritt 7: Skalieren der Managed Nodes
+### Schritt 8: Skalieren der Managed Nodes
 
 Skalieren Sie die Managed Nodes auf 3.
 Nutzen Sie hierfür das docker-compose Kommando 'up' mit der Option '--scale' (siehe <https://docs.docker.com/reference/cli/docker/compose/up/>).
@@ -370,12 +370,12 @@ Optional: bauen Sie eins der Beispiele lokal mit Packer.
 Lesen Sie die Doku zum Bauen von Docker Images mit Packer: <https://developer.hashicorp.com/packer/integrations/hashicorp/docker/latest/components/builder/docker>
 
 Legen Sie ein Packer Template an.
-Verwenden Sie den Docker Builder von Packer, um ein Nginx Image mit.
+Verwenden Sie den Docker Builder von Packer, um ein NGINX Image mit.
 einer eigenen Welcome Seite zu bauen.
 
 Verwenden Sie als Basisimage 'nginx:1.25.4-alpine3.18'.
 
-Exponieren Sie Port '80' im Image und führen Sie das CMD 'nginx -g daemon off;' zum Start von Nginx aus.
+Exponieren Sie Port '80' im Image und führen Sie das CMD 'nginx -g daemon off;' zum Start von NGINX aus.
 
 Da wir ein Alpine-Image verwenden, in dem per Default Bash nicht installiert ist, nutzen Sie das folgende 'run_command' von Packer, damit später beim Container-Start `/bin/sh` anstelle von `/bin/bash` verwendet wird:
 
@@ -407,8 +407,8 @@ Rufen Sie im Browser <http://localhost:8080> auf und verifizieren Sie, dass Ihre
 
 ### Bonus/Optional 1:
 
-Verwenden Sie anstelle des Nginx Images ein Alpine oder Centos Image.
-Installieren Sie Nginx per shell Provisioner.
+Verwenden Sie anstelle des NGINX Images ein Debian oder Alpine Image.
+Installieren Sie NGINX per shell Provisioner.
 
 ### Bonus/Optional 2: Ansible Provisionierung mit Packer ausführen
 

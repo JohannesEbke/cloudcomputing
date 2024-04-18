@@ -43,7 +43,7 @@ Nutzen Sie hierfür ein einfaches HTML, dass eine 'Hello World' Begrüßung ausg
 Legen Sie ein Dockerfile an.
 Führen Sie folgende Schritte aus:
 
-- Nutzen Sie `nginx:1.25.4-alpine3.18` als Basisimage.
+- Nutzen Sie 'nginx:1.25.4-alpine3.18' als Basisimage.
 - Kopieren Sie ihre 'index.html' nach '/usr/share/nginx/html/', indem Sie das Docker Command 'COPY' nutzen.
 - Exponieren Sie den Port '80'.
 - Starten Sie nginx über das Command 'nginx'.
@@ -96,7 +96,7 @@ Rufen Sie den gestarteten nginx Container unter <http://localhost:8080> auf.
 
 Wir nutzen jetzt unser Docker-Image und starten dieses über Docker Compose.
 
-Legen Sie hierfür die Datei `docker-compose.yml` an, die eine Nginx Instanz startet und dabei:
+Legen Sie hierfür die Datei 'docker-compose.yml' an, die eine Nginx Instanz startet und dabei:
 
 - den Service Namen 'cc-nginx' hat
 - das Image auf Basis des in Schritt 1 erstellen Dockerfiles baut
@@ -205,7 +205,7 @@ Erstellen Sie ein Docker Compose File (Datei mit dem Namen 'docker-compose.yml' 
 
 - Eine Ansible Control Node startet und dabei:
   - den Service Namen 'ansible-node' hat
-  - das fertige Image `willhallonline/ansible:2.16.4-alpine-3.18` nutzt.
+  - das fertige Image 'willhallonline/ansible:2.16.4-alpine-3.18' nutzt.
     In diesem ist Ansible in Version 2.16 mit Python3 verfügbar (siehe <https://hub.docker.com/r/willhallonline/ansible>).
   - erst gestartet wird, wenn die Managed Node läuft
   <!-- - ein Memory Limit von 100 MB hat -->
@@ -245,7 +245,7 @@ Stellen Sie eine SSH Verbindung zur Managed Node über folgendes Kommando her:
 ssh managed-node
 ```
 
-Geben Sie das Passwort `verysecretpassword` ein, wenn Sie danach gefragt werden.
+Geben Sie das Passwort 'verysecretpassword' ein, wenn Sie danach gefragt werden.
 Sie können die SSH-Verbindung mit `exit` wieder beenden.
 
 Sie können sowohl über den Service Namen 'managed-node' als auch mit vorangestelltem Präfix 'uebung' (der Name des Ordners) und Suffix '1' eine SSH Verbindung herstellen.
@@ -340,7 +340,7 @@ ansible-playbook /root/playbooks/install-apache.yml
 Finden Sie über `docker ps` heraus, unter welchem Port der gestartete Webserver auf Ihrem Host erreichbar ist.
 Welcher Port leitet Requests an den exponierten Port '80' des Containers weiter?
 
-Rufen Sie in Ihrem Browser `localhost:<port>` für den spezifischen Port auf und verifizieren Sie, dass Ihre index.html angezeigt wird.
+Rufen Sie in Ihrem Browser <http://localhost:&#60;port&#62;> für den spezifischen Port auf und verifizieren Sie, dass Ihre index.html angezeigt wird.
 
 ### Schritt 7: Skalieren der Managed Nodes
 
@@ -373,11 +373,11 @@ Legen Sie ein Packer Template an.
 Verwenden Sie den Docker Builder von Packer, um ein Nginx Image mit.
 einer eigenen Welcome Seite zu bauen.
 
-Verwenden Sie als Basisimage `nginx:1.25.4-alpine3.18`.
+Verwenden Sie als Basisimage 'nginx:1.25.4-alpine3.18'.
 
-Exponieren Sie Port '80' im Image und führen Sie das CMD `nginx -g daemon off;` zum Start von Nginx aus.
+Exponieren Sie Port '80' im Image und führen Sie das CMD 'nginx -g daemon off;' zum Start von Nginx aus.
 
-Da wir ein Alpine Image verwenden, in dem per Default `Bash` nicht installiert ist, nutzen Sie das folgende `run_command` von Packer, damit später beim Container-Start `/bin/sh` anstelle von `/bin/bash` verwendet wird:
+Da wir ein Alpine-Image verwenden, in dem per Default Bash nicht installiert ist, nutzen Sie das folgende 'run_command' von Packer, damit später beim Container-Start `/bin/sh` anstelle von `/bin/bash` verwendet wird:
 
 ``` json
 "run_command": [ "-d", "-t", "-i", "{{.Image}}", "/bin/sh" ]

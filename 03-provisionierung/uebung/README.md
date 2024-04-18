@@ -252,7 +252,7 @@ Sie können sowohl über den Service Namen 'managed-node' als auch mit vorangest
 
 Verifizieren Sie das über
 
-```shell
+``` shell
 ssh uebung-managed-node-1
 ```
 
@@ -269,9 +269,9 @@ Legen Sie die Group "server_hosts" an, tragen Sie darin die Managed Node ein, un
   <details>
   <summary>Wenn Sie nicht weiterkommen, können Sie folgenden Codeblock verwenden:</summary>
 
-  ``` text
+  ``` ini
   [server_hosts]
-  uebung_managed-node_1
+  uebung-managed-node-1
 
   [server_hosts:vars]
   ansible_python_interpreter=/usr/bin/python3

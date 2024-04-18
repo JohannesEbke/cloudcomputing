@@ -196,6 +196,7 @@ Erstellen Sie ein Docker Compose File (Datei mit dem Namen "docker-compose.yml" 
     build:
       context: .
       dockerfile: Dockerfile_Managed_Node
+    image: "cc-managed:latest"
     ports:
       - "80"
   ```
@@ -215,10 +216,11 @@ Erstellen Sie ein Docker Compose File (Datei mit dem Namen "docker-compose.yml" 
   ``` yaml
   ansible-node:
     image: "willhallonline/ansible:2.16.4-alpine-3.18"
-    networks:
-      - cloudcomputing
     depends_on:
       - managed-node
+    volumes:
+      - "./ansible/hosts:/etc/ansible/hosts"
+      - "./playbooks:/root/playbooks"
   ```
 
   </details>

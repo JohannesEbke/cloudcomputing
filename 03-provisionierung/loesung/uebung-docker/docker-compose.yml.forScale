@@ -1,0 +1,9 @@
+services:
+  cc-nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 3
+    ports:
+      - "8080-8082:80"

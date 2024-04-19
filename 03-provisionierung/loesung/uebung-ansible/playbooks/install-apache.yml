@@ -1,0 +1,23 @@
+- hosts: server_hosts
+  remote_user: root
+
+  tasks:
+    - name: test connection
+      ansible.builtin.ping:
+      remote_user: root
+
+    - name: install apache
+      ansible.builtin.apt:
+        name: apache2
+        update_cache: yes
+        state: latest
+
+    - name: copy custom index.html
+      ansible.builtin.copy:
+        src: index.html
+        dest: /var/www/html/index.html
+
+    - name: ensure apache is running
+      ansible.builtin.service:
+        name: apache2
+        state: started

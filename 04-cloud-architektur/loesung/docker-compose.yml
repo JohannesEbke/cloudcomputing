@@ -1,7 +1,7 @@
-version: '2'
+version: '3'
 services:
   consul:
-    image: consul
+    image: consul:1.14.1
     command: consul agent -server -dev -client=0.0.0.0 -ui -bootstrap -log-level warn
     ports:
       - "8400:8400"
@@ -11,11 +11,11 @@ services:
       - cloud-architecture
 
   reverse-proxy:
-    image: reverse-proxy
-    command: traefik --consulcatalog.endpoint=consul:8500
+    image: traefik:v2.9
+    command: --providers.consulcatalog.endpoint.address="consul:8500" --api.insecure=true
     ports:
-      - "8080:8080"
-      - "8081:80"
+      - 80:80
+      - 8080:8080
     depends_on:
       - consul
     links:

@@ -10,7 +10,7 @@ Recherchieren Sie in Ihrer Gruppe die angegebenen Faktoren. Sie können dafür d
 nutzen oder frei recherchieren.
 
 Bereiten Sie gemeinsam jeweils einen kurzen Foliensatz vor (1 Slide je Factor), in dem Sie
-* den Idee hinter dem jeweiligen Factor benennen
+* die Idee hinter dem jeweiligen Factor benennen
 * die Empfehlung erläutern
 
 Bearbeiten Sie in den Gruppen die folgenden Punkte:
@@ -89,12 +89,14 @@ Stellen Sie sicher, dass die Consul UI gestartet wird, und alle benötigen Ports
 
 ```
   consul:
-    image: consul
+    image: hashicorp/consul
     command: consul agent -server -dev -client=0.0.0.0 -ui -bootstrap -log-level warn
     ports:
       - "8400:8400"
       - "8500:8500"
       - "8600:53/udp"
+    networks:
+      - cloud-architecture
 ```
 </details>
 
@@ -213,24 +215,29 @@ Interaktion mit Consul.
 ```
 </details>
 
-### Anbinden des Book-Service an Traefik
-
-In der `application.properties` müssen zudem folgende Properties angelegt werden, um die Service-Registrierung
-in Consul und die Tags für Traefik korrekt zu konfigurieren:
-
-```properties
-# Configuration for traefik
-spring.cloud.consul.discovery.tags=traefik.enable=true,traefik.frontend.rule=PathPrefixStrip:/book-service,traefik.tags=api,traefik.frontend.entrypoint=h
+Starten Sie die Services erneut. Wenn alles geklappt hat, sollten Sie nun den Book-Service in der Traefik-UI sehen.
+Sie sollten nun den Book-Service unter Angabe eines Host-Headers aufrufen können:
+```shell
+curl -H 'Host: book-service' 'http://localhost/api/books'
 ```
 
-Starten Sie die Services erneut. Wenn alles geklappt hat sollten sie nun den Book-Service in der Traefik-API sehen.
-Sie sollten nun den Book-Service über Traefik aufrufen können, z.B. über:
+### Umstellung auf Path-based Routing
+
+In der `application.properties` muss folgende Property angelegt werden:
+
+```properties
+spring.cloud.consul.discovery.tags=traefik.http.routers.book-service.rule=Host(`book-service`) || PathPrefix(`/book-service`),traefik.http.middlewares.book-service-stripprefix.stripprefix.prefixes=/book-service,traefik.http.routers.book-service.middlewares=book-service-stripprefix
+```
+
+Starten Sie die Services erneut. Wenn alles geklappt hat, sollten sie nun eine zusätzliche Middleware Traefik-UI sehen.
+Sie sollten den Book-Service nun auch mit einem Pfad-Präfix aufrufen können:
 ```shell
-curl -H Host:book-service-uebung http://127.0.0.1/api/books
+curl 'http://localhost/book-service/api/books'
 ```
 
 ### Testen
 
-* Die Anwendung sollte nun unter `http://localhost:8081/book-service/api/books` erreichbar sein.
+* Die Anwendung sollte nun mit Header `Host: book-service` unter `http://localhost/api/books` erreichbar sein.
+* Die Anwendung sollte nun unter `http://localhost/book-service/api/books` erreichbar sein.
 * Die Consul UI sollte unter `http://localhost:8500/ui` erreichbar sein.
 * Die Traefik UI sollte unter `http://localhost:8080` erreichbar sein.

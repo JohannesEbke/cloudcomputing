@@ -75,8 +75,10 @@ In diesem Teil der Übung erstellen Sie einen Load Balancer der die Anfragen üb
     * Wählen Sie unter Availability Zones Ihr Netz und Ihre Subnetze aus.
     * Wählen Sie im Folgeschritt _Configure Security Groups_ nur Ihre `loadbalancer-<Ihre Eindeutiger Name>` Security Gruppe aus.
     * Im Schritt _Configure Routing_ wählen Sie das Erstellen einer neuen Target Group und verwenden Sie wieder ihren eindeutigen Namen.
-      * Ändern Sie den Port auf 8080.
-      * Unter _Health checks_ ändern Sie das Protokol auf `HTTP`.
+      * Wählen Sie den Typ `Instances`.
+      * Wählen Sie das Protokoll `HTTP`.
+      * Wählen Sie den Port `8080`.
+      * Unter _Health checks_ wählen Sie das Protokol `HTTP`.
       * Unter _Advanced health check settings_ setzen Sie den _Healthy_ und _Unhealthy threshold_ auf `2` und den _interval_ auf `10 seconds`.
     * Es ist nicht notwendig _Targets_ zu registrieren, dies übernimmt die AutoScaling Gruppe, schließen Sie den Vorgang ab.
 

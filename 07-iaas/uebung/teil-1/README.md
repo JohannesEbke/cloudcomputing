@@ -33,16 +33,16 @@ Verwenden Sie bei der Namenswahl keine Sonderzeichen außer `-` und vermeiden Si
 
 In diesem Teil der Übung erstellen Sie ein virtuelles Netzwerk, mit einem einzelnen Subnetz mit Internet Zugriff.
 
+> [!IMPORTANT]
+> Verwenden sie nicht den VPC Launch Wizard.
+> Ziel dieser Übung ist, dass Sie sich mit den Einzelkomponenten vertraut machen und den Wert von Automatisierung kennenlernen.
+
 1. Klicken Sie in der Menubar auf _Services_, wählen Sie _VPC_ > _Your VPCs_ > Create _VPC_.
     * Vergeben Sie einen eindeutigen Namen, mit dem Sie ihr Netzwerk wiederfinden z.B. _akrause_.
     * Verwenden Sie den IPV4 Adressbereich `10.0.0.0/16`.
     * Klicken Sie auf erstellen.
       Nach dem erstellen werden Sie feststellen, dass über das Netz hinaus weitere Standard Cloud Ressourcen angelegt wurden z.B. eine Routing Tabelle.
-
-    > [!IMPORTANT]
-    > Verwenden sie nicht den VPC Launch Wizard.
-    > Ziel dieser Übung ist, dass Sie sich mit den Einzelkomponenten vertraut machen und den Wert von Automatisierung kennenlernen.
-2.
+3.
     * a) Klicken Sie in der Seitenleiste auf _Subnets_, wähle Sie _Create Subnet_.
         * Verwenden Sie wieder Ihren eindeutigen Namen.
         * Wählen Sie das von Ihnen erstellte VPC als Ziel für ihr Subnetz.
@@ -51,11 +51,11 @@ In diesem Teil der Übung erstellen Sie ein virtuelles Netzwerk, mit einem einze
         * Wählen Sie den Adressbereich kleiner als den Ihres VPC z.B. die Hälfte: `10.0.0.0/17`.
         * Nach der Erstellung, markieren Sie ihr Netz und klicken Sie nun bei _Actions_ die Option _Edit subnet settings_ und aktivieren Sie den Haken bei _Enable auto-assign public IPv4 address_.
     * b) Wiederholen Sie die Schritte in 2a um ein Netz in _eu-central-1b_ mit dem Adressbereich `10.0.128.0/17` zu erzeugen.
-3. Erzeugen Sie nun einen Zugang zum Internet indem Sie in der Seitenleiste auf _Internet Gateways_ klicken und dann _Create Internet Gateway Klicken_.
+4. Erzeugen Sie nun einen Zugang zum Internet indem Sie in der Seitenleiste auf _Internet Gateways_ klicken und dann _Create Internet Gateway Klicken_.
     * Verwenden Sie wieder Ihren eindeutigen Namen.
     * Nach dem Erstellen klicken Sie oben rechts auf _Actions_ und wählen Sie _Attac to VPC_.
     * Wählen Sie ihr VPC und bestätigen Sie.
-4. Klicken Sie nun in der Seitenleiste auf _Route Tables_ und fügen Sie an die Tabelle für Ihr VPC eine weitere Regel ein, die allen Traffic (`0.0.0.0/0`) zu dem von Ihnen erstellten Internet Gateway routed.
+5. Klicken Sie nun in der Seitenleiste auf _Route Tables_ und fügen Sie an die Tabelle für Ihr VPC eine weitere Regel ein, die allen Traffic (`0.0.0.0/0`) zu dem von Ihnen erstellten Internet Gateway routed.
    Die Reihenfolge der Regeln ist hierbei irrelevant, spezifischere greifen zuerst.
 
 #### Einen LoadBalancer erstellen
@@ -127,17 +127,16 @@ Darüber hinaus meldet ihre AutoScaling Gruppe Ihre Instanzen bei der Target Gro
 
 #### Funktionstest
 
+> [!IMPORTANT]
+> Falls Sie MacOS verwenden, dieser Schritt funktioniert nicht mit Safari.
+> Nehmen Sie für diesen Schritt bitte einen anderen Browser.
+
 1. Gehen Sie nun auf ihre Target Group und klicken Sie auf den Reiter _Targets_.
    Ihre Instanzen sollte hier nach kurzer Zeit als _healthy_ auftauchen.
    Sollten die Instanzen nicht auftauchen oder über 5 Minuten hinaus _unhealthy_ sein, haben Sie wahrscheinlich einen Fehler gemacht.
 2. Gehen Sie auf die Ansicht des Load Balancers und kopieren Sie sich den _DNS name_ heraus und öffnen Sie die Adresse in einem neuen Tab.
    Wenn Sie einen Drachen sehen Sie die HTTP Antwort einer Ihrer Instanzen.
 3. Verbinden Sie sich nun mit einer _Ihrer_ laufenden Instanzen per EC2 Instance Connect.
-
-    > [!NOTE]
-    > Falls Sie MacOS verwenden, dieser Schritt funktioniert nicht mit Safari.
-    > Nehmen Sie für diesen Schritt bitte einen anderen Browser.
-
     * Gehen Sie dazu auf _Instances_ und Markieren (nicht auf die Detail-Ansicht Klicken) Sie einer Ihrer Instanzen.
     * Gehen Sie nun oben rechts auf _Actions_ und wählen Sie _Connect_ und in der folgenden Ansicht nochmals auf _Connect_.
     * Sie sind jetzt mit einer Shell Session auf dem Host verbunden.

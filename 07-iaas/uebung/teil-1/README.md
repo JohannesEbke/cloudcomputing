@@ -102,7 +102,7 @@ Darüber hinaus meldet ihre AutoScaling Gruppe Ihre Instanzen bei der Target Gro
 2. Klicken Sie in der Seitenleiste auf den Eintrag _Launch Templates_ > _Create Launch Template_.
     * Verwenden Sie wieder Ihren eindeutigen Namen.
     * Als Beschreibung ist "Launch Template für eine einfache Web Anwendung" geeignet.
-    * Wählen Sie als _AMI_ ein Ubuntu: `ami-0ec7f9846da6b0f61`.
+    * Wählen Sie als _AMI_ ein Ubuntu: `ami-01e444924a2233b07`.
     * Wählen Sie `t2.micro` als Instanztyp
     * Wählen Sie Ihre Security Group für die Applikation.
     * Verwenden Sie das folgende Skript als _User Data_ unter den _Advanced Details_:

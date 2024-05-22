@@ -4,11 +4,12 @@ Ziel dieser Übung ist das erlernen grundlegender Infrastructure as Code Fähigk
 Hierzu werden Sie die Architektur aus der letzten Übung mit Terrform nachbauen.
 Grundlegende Schritte sind hierfür schon vorbereitet.
 
-1. Starten Sie den `iaas-container` und mounten Sie das Verzeichnis `teil-2` nach `/root/teil-2` im Container.
+1. Starten Sie den `iaas-container` und mounten Sie das Verzeichnis `uebung/teil-2` nach `/root/uebung/teil-2` im Container.
    Beispiel mit Bash aus dem Verzeichnis:
 
    ``` shell
-   docker run -it --rm -w /root/teil-2 --mount type=bind,source="$(pwd)",target=/root/teil-2 iaas-container
+   cd 07-iaas/uebung/teil-2
+   docker run -it --rm -w /root/uebung/teil-2 --mount type=bind,source="$(pwd)",target=/root/uebung/teil-2 iaas-container
    ```
 
 2. Konfigurieren Sie Ihren AWS Zungang mit `aws configure`.

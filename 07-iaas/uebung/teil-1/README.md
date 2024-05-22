@@ -209,6 +209,7 @@ Lösung Beobachtungen:
 Bauen Sie das Container Image unter `iaas-container` mit:
 
 ``` shell
+cd 07-iaas/uebung
 docker build -t iaas-container ./iaas-container
 ```
 

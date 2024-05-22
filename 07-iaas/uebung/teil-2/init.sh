@@ -9,6 +9,6 @@ rm -rf /var/lib/apt/lists/*
   echo "<pre>"
   /usr/games/cowsay -f dragon ${message}
   echo "</pre>"
-}  >> index.html
+} >> index.html
 
 nohup busybox httpd -f index.html -p 8080 &

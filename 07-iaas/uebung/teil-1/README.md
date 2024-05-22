@@ -26,7 +26,7 @@ Hinweise:
 Falls nach der Anmeldung die Sprache weiterhin Deutsch ist, melden Sie sich wieder ab und wählen Sie unterhalb der Login-Maske die Sprache Englisch aus und melden Sie sich erneut an.
 * Wichtig wenn Sie Sich einen Account mit anderen Übungsteilnehmern teilen: Denken Sie sich einen eindeutigen Namen für die Benennung/Tags Ihrer Ressourcen aus.
 Da alle Teilnehmer den gleichen Account verwenden werden ist davon auszugehen, dass wenn Sie Ihre Ressourcen nicht wiedererkennbar bennenen Sie und Ihre Kommolitonen Schwierigkeiten haben werden Ihre Ressourcen wiederzufinden.
-Sie können beispielsweise eine Kombination aus Ihrem echten Namen verwenden z.B. `akrause` wenn ihr Name _Alex Krause_ ist oder Sie wählen einen beliebigen anderen Namen wie z.B. `anonymeameise`.
+Sie können beispielsweise eine Kombination aus Ihrem echten Namen verwenden z.B. `akowasch` wenn ihr Name _Andreas Kowasch_ ist oder Sie wählen einen beliebigen anderen Namen wie z.B. `anonymeameise`.
 Verwenden Sie bei der Namenswahl keine Sonderzeichen außer `-` und vermeiden Sie Umlaute.
 
 #### Ein VPC erstellen
@@ -118,9 +118,11 @@ Darüber hinaus meldet Ihre AutoScaling Gruppe Ihre Instanzen bei der Target Gro
       apt-get install -y busybox cowsay
       source /etc/environment
 
-      echo "<pre>" >> index.html
-      /usr/games/cowsay -f dragon Hello World >> index.html
-      echo "</pre>" >> index.html
+      {
+        echo "<pre>"
+        /usr/games/cowsay -f dragon Hello World
+        echo "</pre>"
+      } >> index.html
 
       nohup busybox httpd -f index.html -p 8080 &
       ```
@@ -227,9 +229,9 @@ Es sollte eine Antwort ähnlich dieser auf der Konsole erscheinen:
 
 ``` json
 {
-    "UserId": "AIDAIVMF6UC5ZJA4LA2QU",
-    "Account": "264524865537",
-    "Arn": "arn:aws:iam::264524865537:user/akrause"
+  "UserId": "AIDAIVMF6UC5ZJA4LA2QU",
+  "Account": "264524865537",
+  "Arn": "arn:aws:iam::264524865537:user/akrause"
 }
 ```
 
@@ -249,8 +251,8 @@ Lösung:
 
 > ``` shell
 > aws autoscaling set-desired-capacity \
->   --auto-scaling-group-name="<IHR EINDEUTIGER NAME>" \
->   --desired-capacity="1"
+>   --auto-scaling-group-name <IHR EINDEUTIGER NAME> \
+>   --desired-capacity 1
 > ```
 
 </p>
@@ -263,20 +265,18 @@ Achten Sie darauf, sich nicht mit der Instanz zu verbinden, die eventuell noch a
 Setzen Sie Ihren Eindeutigen Namen in folgendes Kommando ein und führen Sie es aus, um Ihre Instanz zu finden:
 
 ``` shell
-AWS_PAGER=$(
-  aws ec2 describe-instances \
-    --filters "Name=tag:aws:autoscaling:groupName,Values=<IHR EINDEUTIGER NAME>" "Name=instance-state-name,Values=running" \
-    --query 'Reservations[].Instances[].InstanceId' \
-    --output text
-  )
+aws ec2 describe-instances \
+  --filters "Name=tag:aws:autoscaling:groupName,Values=<IHR EINDEUTIGER NAME>" "Name=instance-state-name,Values=running" \
+  --query 'Reservations[].Instances[].InstanceId' \
+  --output text
 ```
 
 Sie können die Instanz Id mit folgendem Kommando verwenden, um sich mit der Instanz zu verbinden:
 
 ``` shell
 aws ec2-instance-connect ssh \
-  --instance-id="<INSTANZ ID>" \
-  --os-user="ubuntu"
+  --instance-id <INSTANZ ID> \
+  --os-user ubuntu
 ```
 
 Editieren Sie die `index.html` unter `/` als, so dass ein Pinguin erscheint - hierzu brauchen Sie root Rechte.
@@ -309,8 +309,8 @@ Lösung:
 
 > ``` shell
 > aws autoscaling set-desired-capacity \
->   --auto-scaling-group-name="<IHR EINDEUTIGER NAME>" \
->   --desired-capacity="2"
+>   --auto-scaling-group-name <IHR EINDEUTIGER NAME> \
+>   --desired-capacity 2
 > ```
 
 </p>
@@ -338,7 +338,7 @@ Was werden Ihre Nutzer sehen, sobald die zusätzliche Instanz nach einigen Minut
 >
 > ``` shell
 > aws autoscaling start-instance-refresh \
->   --auto-scaling-group-name="<IHR EINDEUTIGER NAME>"
+>   --auto-scaling-group-name <IHR EINDEUTIGER NAME>
 > ```
 
 </p>

@@ -2,7 +2,8 @@ resource "aws_security_group" "lb" {
   name        = "${local.env}-lb"
   description = "Allow TLS inbound traffic"
   vpc_id      = module.vpc.vpc_id
-  tags        = local.standard_tags
+
+  tags = local.standard_tags
 }
 
 resource "aws_security_group_rule" "lb_http" {
@@ -30,7 +31,8 @@ resource "aws_lb" "app" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.lb.id]
   subnets            = module.vpc.public_subnets
-  tags               = local.standard_tags
+
+  tags = local.standard_tags
 }
 
 resource "aws_lb_target_group" "app" {
@@ -46,6 +48,8 @@ resource "aws_lb_target_group" "app" {
     port     = "8080"
     protocol = "HTTP"
   }
+
+  tags = local.standard_tags
 }
 
 resource "aws_lb_listener" "lb_forward_to_app" {
@@ -57,4 +61,6 @@ resource "aws_lb_listener" "lb_forward_to_app" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.app.arn
   }
+
+  tags = local.standard_tags
 }

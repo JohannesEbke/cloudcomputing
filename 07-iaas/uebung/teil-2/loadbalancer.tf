@@ -15,7 +15,8 @@
 #   load_balancer_type = "application"
 #   security_groups    =
 #   subnets            =
-#   tags               = local.standard_tags
+#
+#   tags = local.standard_tags
 # }
 
 # ToDo: Create a target group
@@ -34,6 +35,8 @@
 #     port     =
 #     protocol =
 #   }
+#
+#   tags = local.standard_tags
 # }
 
 # ToDo: Create a listener
@@ -44,4 +47,6 @@
 #   default_action {
 #     ...
 #   }
+#
+#   tags = local.standard_tags
 # }

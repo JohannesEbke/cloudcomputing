@@ -1,7 +1,7 @@
-# More Info: https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
 module "vpc" {
+  # https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
   source  = "terraform-aws-modules/vpc/aws"
-  version = "2.63.0"
+  version = "5.8.1"
 
   name = local.env
   cidr = "10.0.0.0/16"

@@ -3,10 +3,12 @@ set -euxo pipefail
 
 apt-get update
 apt-get install -y busybox cowsay
-source /etc/environment
+rm -rf /var/lib/apt/lists/*
 
-echo "<pre>" >> index.html
-/usr/games/cowsay -f dragon ${message} >> index.html
-echo "</pre>" >> index.html
+{
+  echo "<pre>"
+  /usr/games/cowsay -f dragon ${message}
+  echo "</pre>"
+}  >> index.html
 
 nohup busybox httpd -f index.html -p 8080 &

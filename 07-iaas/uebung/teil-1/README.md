@@ -25,7 +25,7 @@ Hinweise:
 * Stellen Sie sicher, dass die AWS Region _eu-central-1 (Frankfurt)_ (rechter, oberer Bildschirmrand) ist und die Sprache auf _English_ (linker, unterer Bildschirmrand) steht.
 Falls nach der Anmeldung die Sprache weiterhin Deutsch ist, melden Sie sich wieder ab und wählen Sie unterhalb der Login-Maske die Sprache Englisch aus und melden Sie sich erneut an.
 * Wichtig wenn Sie Sich einen Account mit anderen Übungsteilnehmern teilen: Denken Sie sich einen eindeutigen Namen für die Benennung/Tags Ihrer Ressourcen aus.
-Da alle Teilnehmer den gleichen Account verwenden werden ist davon auszugehen, dass wenn Sie ihre Ressourcen nicht wiedererkennbar bennenen Sie und Ihre Kommolitonen Schwierigkeiten haben werden Ihre Ressourcen wiederzufinden.
+Da alle Teilnehmer den gleichen Account verwenden werden ist davon auszugehen, dass wenn Sie Ihre Ressourcen nicht wiedererkennbar bennenen Sie und Ihre Kommolitonen Schwierigkeiten haben werden Ihre Ressourcen wiederzufinden.
 Sie können beispielsweise eine Kombination aus Ihrem echten Namen verwenden z.B. `akrause` wenn ihr Name _Alex Krause_ ist oder Sie wählen einen beliebigen anderen Namen wie z.B. `anonymeameise`.
 Verwenden Sie bei der Namenswahl keine Sonderzeichen außer `-` und vermeiden Sie Umlaute.
 
@@ -34,7 +34,7 @@ Verwenden Sie bei der Namenswahl keine Sonderzeichen außer `-` und vermeiden Si
 In diesem Teil der Übung erstellen Sie ein virtuelles Netzwerk, mit einem einzelnen Subnetz mit Internet Zugriff.
 
 > [!IMPORTANT]
-> Verwenden sie nicht den VPC Launch Wizard.
+> Verwenden Sie nicht den VPC Launch Wizard.
 > Ziel dieser Übung ist, dass Sie sich mit den Einzelkomponenten vertraut machen und den Wert von Automatisierung kennenlernen.
 
 1. Klicken Sie in der Menubar auf _Services_, wählen Sie _VPC_ > _Your VPCs_ > Create _VPC_.
@@ -42,7 +42,8 @@ In diesem Teil der Übung erstellen Sie ein virtuelles Netzwerk, mit einem einze
     * Verwenden Sie den IPV4 Adressbereich `10.0.0.0/16`.
     * Klicken Sie auf erstellen.
       Nach dem erstellen werden Sie feststellen, dass über das Netz hinaus weitere Standard Cloud Ressourcen angelegt wurden z.B. eine Routing Tabelle.
-3.
+
+2.
     * a) Klicken Sie in der Seitenleiste auf _Subnets_, wähle Sie _Create Subnet_.
         * Verwenden Sie wieder Ihren eindeutigen Namen.
         * Wählen Sie das von Ihnen erstellte VPC als Ziel für ihr Subnetz.
@@ -51,11 +52,13 @@ In diesem Teil der Übung erstellen Sie ein virtuelles Netzwerk, mit einem einze
         * Wählen Sie den Adressbereich kleiner als den Ihres VPC z.B. die Hälfte: `10.0.0.0/17`.
         * Nach der Erstellung, markieren Sie ihr Netz und klicken Sie nun bei _Actions_ die Option _Edit subnet settings_ und aktivieren Sie den Haken bei _Enable auto-assign public IPv4 address_.
     * b) Wiederholen Sie die Schritte in 2a um ein Netz in _eu-central-1b_ mit dem Adressbereich `10.0.128.0/17` zu erzeugen.
-4. Erzeugen Sie nun einen Zugang zum Internet indem Sie in der Seitenleiste auf _Internet Gateways_ klicken und dann _Create Internet Gateway Klicken_.
+
+3. Erzeugen Sie nun einen Zugang zum Internet indem Sie in der Seitenleiste auf _Internet Gateways_ klicken und dann _Create Internet Gateway Klicken_.
     * Verwenden Sie wieder Ihren eindeutigen Namen.
     * Nach dem Erstellen klicken Sie oben rechts auf _Actions_ und wählen Sie _Attac to VPC_.
     * Wählen Sie ihr VPC und bestätigen Sie.
-5. Klicken Sie nun in der Seitenleiste auf _Route Tables_ und fügen Sie an die Tabelle für Ihr VPC eine weitere Regel ein, die allen Traffic (`0.0.0.0/0`) zu dem von Ihnen erstellten Internet Gateway routed.
+
+4. Klicken Sie nun in der Seitenleiste auf _Route Tables_ und fügen Sie an die Tabelle für Ihr VPC eine weitere Regel ein, die allen Traffic (`0.0.0.0/0`) zu dem von Ihnen erstellten Internet Gateway routed.
    Die Reihenfolge der Regeln ist hierbei irrelevant, spezifischere greifen zuerst.
 
 #### Einen LoadBalancer erstellen
@@ -74,7 +77,7 @@ In diesem Teil der Übung erstellen Sie einen Load Balancer der die Anfragen üb
     * Verwenden Sie wieder Ihren eindeutigen Namen.
     * Wählen Sie unter Availability Zones Ihr Netz und Ihre Subnetze aus.
     * Wählen Sie im Folgeschritt _Configure Security Groups_ nur Ihre `loadbalancer-<Ihre Eindeutiger Name>` Security Gruppe aus.
-    * Im Schritt _Configure Routing_ wählen Sie das Erstellen einer neuen Target Group und verwenden Sie wieder ihren eindeutigen Namen.
+    * Im Schritt _Configure Routing_ wählen Sie das Erstellen einer neuen Target Group und verwenden Sie wieder Ihren eindeutigen Namen.
       * Unter _Basic configuration_
         * Wählen Sie den Typ `Instances`.
         * Wählen Sie das Protokoll `HTTP`.
@@ -89,8 +92,8 @@ In diesem Teil der Übung erstellen Sie einen Load Balancer der die Anfragen üb
 
 #### Eine AutoScaling Gruppe einrichten
 
-In diesem Teil der Übung erstellen Sie eine AutoScaling Gruppe, welche Ihnen erlaubt ihre Instanzen bequem zu skalieren und auszutauschen.
-Darüber hinaus meldet ihre AutoScaling Gruppe Ihre Instanzen bei der Target Group des Load Balancers an.
+In diesem Teil der Übung erstellen Sie eine AutoScaling Gruppe, welche Ihnen erlaubt Ihre Instanzen bequem zu skalieren und auszutauschen.
+Darüber hinaus meldet Ihre AutoScaling Gruppe Ihre Instanzen bei der Target Group des Load Balancers an.
 
 1. Erstellen Sie eine weitere Security Group.
     * Benennen Sie die Gruppe nach dem Schema `app-<Ihr Eindeutiger Name>`.
@@ -102,7 +105,7 @@ Darüber hinaus meldet ihre AutoScaling Gruppe Ihre Instanzen bei der Target Gro
 2. Klicken Sie in der Seitenleiste auf den Eintrag _Launch Templates_ > _Create Launch Template_.
     * Verwenden Sie wieder Ihren eindeutigen Namen.
     * Als Beschreibung ist "Launch Template für eine einfache Web Anwendung" geeignet.
-    * Wählen Sie als _AMI_ ein Ubuntu: `ami-01e444924a2233b07`.
+    * Wählen Sie als _AMI_ ein Ubuntu: `ami-04b70fa74e45c3917`.
     * Wählen Sie `t2.micro` als Instanztyp
     * Wählen Sie Ihre Security Group für die Applikation.
     * Verwenden Sie das folgende Skript als _User Data_ unter den _Advanced Details_:
@@ -138,11 +141,13 @@ Darüber hinaus meldet ihre AutoScaling Gruppe Ihre Instanzen bei der Target Gro
 > Falls Sie MacOS verwenden, dieser Schritt funktioniert nicht mit Safari.
 > Nehmen Sie für diesen Schritt bitte einen anderen Browser.
 
-1. Gehen Sie nun auf ihre Target Group und klicken Sie auf den Reiter _Targets_.
+1. Gehen Sie nun auf Ihre Target Group und klicken Sie auf den Reiter _Targets_.
    Ihre Instanzen sollte hier nach kurzer Zeit als _healthy_ auftauchen.
    Sollten die Instanzen nicht auftauchen oder über 5 Minuten hinaus _unhealthy_ sein, haben Sie wahrscheinlich einen Fehler gemacht.
+
 2. Gehen Sie auf die Ansicht des Load Balancers und kopieren Sie sich den _DNS name_ heraus und öffnen Sie die Adresse in einem neuen Tab.
    Wenn Sie einen Drachen sehen Sie die HTTP Antwort einer Ihrer Instanzen.
+
 3. Verbinden Sie sich nun mit einer _Ihrer_ laufenden Instanzen per EC2 Instance Connect.
     * Gehen Sie dazu auf _Instances_ und Markieren (nicht auf die Detail-Ansicht Klicken) Sie einer Ihrer Instanzen.
     * Gehen Sie nun oben rechts auf _Actions_ und wählen Sie _Connect_ und in der folgenden Ansicht nochmals auf _Connect_.
@@ -210,12 +215,12 @@ docker build -t iaas-container ./iaas-container
 Starten Sie den Container mit:
 
 ``` shell
-docker run -it --rm -w /root iaas-container
+docker run -it --rm iaas-container
 ```
 
 Nun sollte eine Bash Session vor Ihnen geöffnet sein.
 Geben Sie `aws configure`.
-In der folgenden Abfrage geben Sie ihre AWS Zugangsdaten ein, wählen sie `eu-central-1` als Standard Region.
+In der folgenden Abfrage geben Sie Ihre AWS Zugangsdaten ein, wählen Sie `eu-central-1` als Standard Region.
 Testen Sie anschließend mit `aws sts get-caller-identity` Ihre Konfiguration.
 Es sollte eine Antwort ähnlich dieser auf der Konsole erscheinen:
 
@@ -229,8 +234,7 @@ Es sollte eine Antwort ähnlich dieser auf der Konsole erscheinen:
 
 #### Arbeiten mit der Kommandozeile
 
-In Ihrer Docker Umgebung ist sowohl eine das Kommandozeilen Programm für AWS installiert (`aws`) als auch ene Programm zur bequemen Verwendung von EC2Connect(`mssh`).
-Letzeres erlaubt Ihnen das Verbinden mit einer EC2 Instanz per SSH, sofern Sie die Berechtigung dafür haben.
+In Ihrer Docker-Umgebung ist das Kommandozeilen-Programm (`aws`) installiert, welches es Ihnen das Verbinden mit einer EC2-Instanz per SSH erlaubt.
 
 Stellen Sie sich nun vor Sie sind für den zuverlässigen Betrieb des von Ihnen heute erstellten _Dragon Service_ im Auftrag eines Geldgebers verantwortlich.
 Ihr Geldgeber stellt nun fest, dass die Nutzerzahlen Ihres Services zurückgehen und will daher Geld sparen - er ist bereit eine geringere Verfügbarkeit in Kauf zu nehmen.
@@ -243,26 +247,35 @@ Lösung:
 <p>
 
 > ``` shell
-> aws autoscaling set-desired-capacity --auto-scaling-group-name [IHR EINDEUTIGER NAME] --desired-capacity 1
+> aws autoscaling set-desired-capacity \
+>   --auto-scaling-group-name="<IHR EINDEUTIGER NAME>" \
+>   --desired-capacity="1"
 > ```
 
 </p>
 </details>
 
 Um die Nutzerzahlen wieder zu erhöhen möchte Ihr Geldgeber ein neues Format ausprobieren - Pinguine, so hat er gehört, sollen unter Informatikern sehr beliebt sein.
-Verbinden Sie sich per `mssh` mit der verbleibenden Instanz.
+Verbinden Sie sich mit der verbleibenden Instanz.
 Achten Sie darauf, sich nicht mit der Instanz zu verbinden, die eventuell noch am herunterfahren ist.
 
-Setzen Sie ihren Eindeutigen Namen in folgendes Kommando ein und führen Sie es aus, um Ihre Instanz zu finden:
+Setzen Sie Ihren Eindeutigen Namen in folgendes Kommando ein und führen Sie es aus, um Ihre Instanz zu finden:
 
 ``` shell
-AWS_PAGER="" aws ec2 describe-instances --filters "Name=tag:aws:autoscaling:groupName,Values=<IHR EINDEUTIGER NAME>" "Name=instance-state-name,Values=running" --query 'Reservations[].Instances[].InstanceId' --output text
+AWS_PAGER=$(
+  aws ec2 describe-instances \
+    --filters "Name=tag:aws:autoscaling:groupName,Values=<IHR EINDEUTIGER NAME>" "Name=instance-state-name,Values=running" \
+    --query 'Reservations[].Instances[].InstanceId' \
+    --output text
+  )
 ```
 
 Sie können die Instanz Id mit folgendem Kommando verwenden, um sich mit der Instanz zu verbinden:
 
 ``` shell
-mssh ubuntu@<Instanz ID>
+aws ec2-instance-connect ssh \
+  --instance-id="<INSTANZ ID>" \
+  --os-user="ubuntu"
 ```
 
 Editieren Sie die `index.html` unter `/` als, so dass ein Pinguin erscheint - hierzu brauchen Sie root Rechte.
@@ -294,13 +307,15 @@ Lösung:
 <p>
 
 > ``` shell
-> aws autoscaling set-desired-capacity --auto-scaling-group-name [IHR EINDEUTIGER NAME] --desired-capacity 2
+> aws autoscaling set-desired-capacity \
+>   --auto-scaling-group-name="<IHR EINDEUTIGER NAME>" \
+>   --desired-capacity="2"
 > ```
 
 </p>
 </details>
 
-Was werden ihre Nutzer sehen sobald die zusätzliche Instanz nach einigen Minuten erfolgreich beim Load Balancer angemeldet wurde?
+Was werden Ihre Nutzer sehen, sobald die zusätzliche Instanz nach einigen Minuten erfolgreich beim Load Balancer angemeldet wurde?
 
 <details>
 <p>
@@ -321,7 +336,8 @@ Was werden ihre Nutzer sehen sobald die zusätzliche Instanz nach einigen Minute
 > Einen rollierenden Austausch ohne Ausfall des Services können Sie auch vollautomatisch starten:
 >
 > ``` shell
-> aws autoscaling start-instance-refresh --auto-scaling-group-name [IHR EINDEUTIGER NAME]
+> aws autoscaling start-instance-refresh \
+>   --auto-scaling-group-name="<IHR EINDEUTIGER NAME>"
 > ```
 
 </p>

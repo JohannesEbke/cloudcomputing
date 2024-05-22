@@ -1,2 +1,1 @@
-
-# TODO: Define an output for the LoadBalancer URL
+# ToDo: Define an output for the LoadBalancer URL

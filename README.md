@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD033 -->
+
 ![Vorlesung Cloud Computing](https://github.com/qaware/cloudcomputing/blob/master/vl-cc-logo.jpg "Vorlesung Cloud Computing")
 
 __Aktuelle Vorlesung: Hochschule München, Sommersemester 2024__
@@ -23,7 +25,7 @@ Für die Übungen notwendige Software:
 
 * Java-Entwicklungsumgebung der Wahl (Eclipse, IntelliJ, Netbeans).
 * Java Development Kit (JDK) 11. (https://adoptopenjdk.net/)
-* git in der aktuellsten Version: https://git-scm.com/downloads. Optional: github Desktop (https://desktop.github.com).
+* git in der aktuellsten Version: https://git-scm.com/downloads. Optional: github Desktop (https://desktop.github.com).
 * Vagrant (inklusive der benötigten VirtualBox Version) in der aktuellsten Version. (https://www.vagrantup.com)
 * Docker for Linux, Docker Desktop for Mac oder Docker Desktop for Windows (https://docs.docker.com/)
 * Minikube (https://github.com/kubernetes/minikube/releases)
@@ -36,10 +38,11 @@ Autoren:
 * Moritz Kammerer (moritz.kammerer@qaware.de, [@phxql](https://github.com/phxql))
 * Sonja Wegner (sonja.wegner@qaware.de, [@sonjawegner](https://github.com/sonjawegner))
 * Johannes Ebke (johannes.ebke@hm.edu, [@JohannesEbke](https://github.com/JohannesEbke))
-* Simon Bäumler
-* Bernhard Saumweber (bernhard.saumweber@qaware.de)
+* Simon Bäumler ([@simonbaeumler](simonbaeumler))
+* Bernhard Saumweber (bernhard.saumweber@qaware.de, [@0xqab](https://github.com/0xqab))
 * Stefan Schmöller (stefan.schmoeller@qaware.de)
-* Franz Wimmer (franz.wimmer@qaware.de)
-* Lukas Buchner (lukas.buchner@qaware.de)
+* Franz Wimmer (franz.wimmer@qaware.de, [@zalintyre](https://github.com/zalintyre))
+* Lukas Buchner (lukas.buchner@qaware.de, [@CryoCodec](https://github.com/CryoCodec))
+* Andreas Kowasch (andreas@kowasch.de, [@akowasch](https://github.com/akowasch))
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons Lizenzvertrag" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">Cloud Computing Vorlesung</span> von <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Josef Adersberger</span> und <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">M.-Leander Reimer</span> ist lizenziert unter einer <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Namensnennung - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz</a>.

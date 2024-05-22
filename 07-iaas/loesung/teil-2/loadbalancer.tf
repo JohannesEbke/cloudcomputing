@@ -1,5 +1,3 @@
-# TODO: Create a Security Group for the Load Balancer
-# See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
 resource "aws_security_group" "lb" {
   name        = "${local.env}-lb"
   description = "Allow TLS inbound traffic"
@@ -7,8 +5,6 @@ resource "aws_security_group" "lb" {
   tags        = local.standard_tags
 }
 
-# TODO: Allow incoming traffic on the Load Balancer on port 80 from everywhere 
-# See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule 
 resource "aws_security_group_rule" "lb_http" {
   security_group_id = aws_security_group.lb.id
   description       = "Allows HTTP from everywhere"
@@ -19,8 +15,6 @@ resource "aws_security_group_rule" "lb_http" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-# TODO: Allow outgoing traffic from the LB to everywhere
-# See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule 
 resource "aws_security_group_rule" "lb_all_outgoing" {
   security_group_id = aws_security_group.lb.id
   description       = "Allows HTTP to App SG"
@@ -31,9 +25,6 @@ resource "aws_security_group_rule" "lb_all_outgoing" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-
-# TODO: Create the Load Balancer
-# See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb
 resource "aws_lb" "app" {
   name               = local.env
   load_balancer_type = "application"
@@ -42,8 +33,6 @@ resource "aws_lb" "app" {
   tags               = local.standard_tags
 }
 
-# TODO: Create a target group
-# See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group
 resource "aws_lb_target_group" "app" {
   name                 = local.env
   port                 = 8080
@@ -59,8 +48,6 @@ resource "aws_lb_target_group" "app" {
   }
 }
 
-# TODO: Create a listener
-# See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener
 resource "aws_lb_listener" "lb_forward_to_app" {
   load_balancer_arn = aws_lb.app.arn
   port              = "80"
@@ -71,4 +58,3 @@ resource "aws_lb_listener" "lb_forward_to_app" {
     target_group_arn = aws_lb_target_group.app.arn
   }
 }
-

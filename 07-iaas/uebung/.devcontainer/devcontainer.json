@@ -1,10 +1,12 @@
 {
-    "name": "IaaS Container",
-    "dockerFile": "../iaas-container/Dockerfile",
-    "settings": {
+  "name": "IaaS Container",
+  "dockerFile": "../iaas-container/Dockerfile",
+  "customizations": {
+    "vscode": {
+      "settings": {
         "terminal.integrated.shell.linux": "/bin/bash"
-    },
-    "extensions": [
-        "hashicorp.terraform"
-    ]
+      },
+      "extensions": ["hashicorp.terraform"]
+    }
+  }
 }

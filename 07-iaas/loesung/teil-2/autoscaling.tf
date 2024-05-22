@@ -15,7 +15,6 @@ resource "aws_security_group_rule" "app_ssh" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-
 resource "aws_security_group_rule" "app_outgoing" {
   security_group_id = aws_security_group.app.id
   description       = "Allows all outgoing traffic"
@@ -26,8 +25,6 @@ resource "aws_security_group_rule" "app_outgoing" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-# TODO: Allow Ingress from the Security Group of the Load Balancer to the App Security Group in port 8080
-# See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule 
 resource "aws_security_group_rule" "app_to_lb" {
   security_group_id        = aws_security_group.app.id
   description              = "Allows HTTP access from the load balancer"
@@ -39,15 +36,16 @@ resource "aws_security_group_rule" "app_to_lb" {
 }
 
 resource "aws_launch_template" "app" {
-  name = local.env
-
-  image_id                             = "ami-0dba2cb6798deb6d8"
+  name                                 = local.env
+  image_id                             = "ami-04b70fa74e45c3917"
   instance_initiated_shutdown_behavior = "terminate"
   update_default_version               = true
+  instance_type                        = "t2.micro"
 
-  instance_type = "t2.micro"
-
-  vpc_security_group_ids = [aws_security_group.app.id]
+  network_interfaces {
+    associate_public_ip_address = true
+    security_groups             = [aws_security_group.app.id]
+  }
 
   tag_specifications {
     resource_type = "instance"
@@ -61,20 +59,25 @@ resource "aws_launch_template" "app" {
   )
 }
 
-
-# TODO: Create an AutoScaling Group that manages 0 to 4 instances, with a default of 1
-# See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_group
-
-resource aws_autoscaling_group app {
-  name     = local.env
-  min_size = 0
-  max_size = 4
-  launch_template {
-    id = aws_launch_template.app.id
-  }
+resource "aws_autoscaling_group" "app" {
+  name                = local.env
+  min_size            = 0
+  max_size            = 4
   desired_capacity    = 1
   vpc_zone_identifier = module.vpc.public_subnets
   health_check_type   = "ELB"
   target_group_arns   = [aws_lb_target_group.app.arn]
-  tags                = local.standard_tags_asg
+
+  launch_template {
+    id = aws_launch_template.app.id
+  }
+
+  dynamic "tag" {
+    for_each = local.standard_tags_asg
+    content {
+      key                 = tag.value.key
+      propagate_at_launch = tag.value.propagate_at_launch
+      value               = tag.value.value
+    }
+  }
 }

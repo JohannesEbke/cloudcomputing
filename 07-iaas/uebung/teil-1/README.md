@@ -211,11 +211,12 @@ Lösung Beobachtungen:
 Bauen Sie das Container Image unter `iaas-container` mit:
 
 ``` shell
-cd 07-iaas/uebung
+cd 07-iaas/uebung/iaas-container
 docker build \
-  --build-arg BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+  --build-arg IMAGE_CREATED="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+  --build-arg IMAGE_REVISION="$(git rev-parse --abbrev-ref HEAD)" \
   --tag iaas-container \
-  ./iaas-container
+  .
 ```
 
 Starten Sie den Container mit:

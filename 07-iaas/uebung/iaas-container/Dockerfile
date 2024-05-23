@@ -9,16 +9,16 @@ FROM ubuntu:24.04@sha256:3f85b7caad41a95462cf5b787d8a04604c8262cdcdf9a472b8c52ef
 
 LABEL maintainer="Andreas Kowasch <andreas@kowasch.de>"
 
-ARG BUILD_DATE="1970-01-01T00:00:00Z"
-ARG VCS_REF="master"
+ARG IMAGE_CREATED="1970-01-01T00:00:00Z"
+ARG IMAGE_REVISION="master"
 
 LABEL org.opencontainers.image.title="cloudcomputing/iaas-container" \
       org.opencontainers.image.description="Cloud Computing - IaaS Container" \
       org.opencontainers.image.authors="Andreas Kowasch <andreas@kowasch.de>" \
-      org.opencontainers.image.created="${BUILD_DATE}" \
+      org.opencontainers.image.created="${IMAGE_CREATED}" \
       org.opencontainers.image.url="https://github.com/JohannesEbke/cloudcomputing/tree/master/07-iaas" \
       org.opencontainers.image.source="https://github.com/JohannesEbke/cloudcomputing/tree/master/07-iaas/uebung/iaas-container" \
-      org.opencontainers.image.revision="${VCS_REF}" \
+      org.opencontainers.image.revision="${IMAGE_REVISION}" \
       org.opencontainers.image.vendor="Munich University of Applied Sciences" \
       org.opencontainers.image.documentation="https://github.com/JohannesEbke/cloudcomputing/tree/master/07-iaas/uebung/iaas-container"
 

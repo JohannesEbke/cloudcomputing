@@ -105,7 +105,7 @@ Darüber hinaus meldet Ihre AutoScaling Gruppe Ihre Instanzen bei der Target Gro
 2. Klicken Sie in der Seitenleiste auf den Eintrag _Launch Templates_ > _Create Launch Template_.
     * Verwenden Sie wieder Ihren eindeutigen Namen.
     * Als Beschreibung ist "Launch Template für eine einfache Web Anwendung" geeignet.
-    * Wählen Sie als _AMI_ ein Ubuntu: `ami-04b70fa74e45c3917`.
+    * Wählen Sie als _AMI_ ein Ubuntu: `ami-01e444924a2233b07`.
     * Wählen Sie `t2.micro` als Instanztyp
     * Wählen Sie Ihre Security Group für die Applikation.
     * Verwenden Sie das folgende Skript als _User Data_ unter den _Advanced Details_:
@@ -212,7 +212,10 @@ Bauen Sie das Container Image unter `iaas-container` mit:
 
 ``` shell
 cd 07-iaas/uebung
-docker build -t iaas-container ./iaas-container
+docker build \
+  --build-arg BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+  --tag iaas-container \
+  ./iaas-container
 ```
 
 Starten Sie den Container mit:

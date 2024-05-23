@@ -5,7 +5,7 @@ resource "aws_security_group" "app" {
   tags        = local.standard_tags
 }
 
-resource "aws_security_group_rule" "app_ssh" {
+resource "aws_security_group_rule" "app_ingress_ssh" {
   security_group_id = aws_security_group.app.id
   description       = "Allows SSH from everywhere"
   type              = "ingress"
@@ -15,20 +15,10 @@ resource "aws_security_group_rule" "app_ssh" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-resource "aws_security_group_rule" "app_outgoing" {
-  security_group_id = aws_security_group.app.id
-  description       = "Allows all outgoing traffic"
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-
 # ToDo: Allow Ingress from the Security Group of the Load Balancer to the App Security Group in port 8080
 # See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule
 
-# resource "aws_security_group_rule" "app_to_lb" {
+# resource "aws_security_group_rule" "app_ingress_lb" {
 #   security_group_id        =
 #   description              = "Allows HTTP access from the load balancer"
 #   type                     = "ingress"
@@ -38,9 +28,19 @@ resource "aws_security_group_rule" "app_outgoing" {
 #   source_security_group_id =
 # }
 
+resource "aws_security_group_rule" "app_egress_all" {
+  security_group_id = aws_security_group.app.id
+  description       = "Allows all outgoing traffic"
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
 resource "aws_launch_template" "app" {
   name                                 = local.env
-  image_id                             = "ami-04b70fa74e45c3917"
+  image_id                             = "ami-01e444924a2233b07"
   instance_initiated_shutdown_behavior = "terminate"
   update_default_version               = true
   instance_type                        = "t2.micro"

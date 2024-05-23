@@ -9,7 +9,7 @@ Grundlegende Schritte sind hierfür schon vorbereitet.
 
    ``` shell
    cd 07-iaas/uebung/teil-2
-   docker run -it --rm -w /root/uebung/teil-2 --mount type=bind,source="$(pwd)",target=/root/uebung/teil-2 iaas-container
+   docker run -it --rm -w /code --mount type=bind,source="$(pwd)",target=/code iaas-container
    ```
 
 2. Konfigurieren Sie Ihren AWS Zungang mit `aws configure`.

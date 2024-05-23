@@ -5,7 +5,9 @@ resource "aws_security_group" "app" {
   tags        = local.standard_tags
 }
 
-resource "aws_security_group_rule" "app_ingress_ssh" {
+resource "aws_security_group_rule" "app_ingress_ssh_all" {
+  #checkov:skip=CKV_AWS_24:Ensure no security groups allow ingress from 0.0.0.0:0 to port 22
+
   security_group_id = aws_security_group.app.id
   description       = "Allows SSH from everywhere"
   type              = "ingress"
@@ -15,7 +17,7 @@ resource "aws_security_group_rule" "app_ingress_ssh" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
-resource "aws_security_group_rule" "app_ingress_lb" {
+resource "aws_security_group_rule" "app_ingress_http_lb" {
   security_group_id        = aws_security_group.app.id
   description              = "Allows HTTP access from the load balancer"
   type                     = "ingress"
@@ -36,6 +38,8 @@ resource "aws_security_group_rule" "app_egress_all" {
 }
 
 resource "aws_launch_template" "app" {
+  #checkov:skip=CKV_AWS_88:EC2 instance should not have public IP
+
   name                                 = local.env
   image_id                             = "ami-01e444924a2233b07"
   instance_initiated_shutdown_behavior = "terminate"
@@ -50,6 +54,12 @@ resource "aws_launch_template" "app" {
   tag_specifications {
     resource_type = "instance"
     tags          = local.standard_tags
+  }
+
+  metadata_options {
+    http_endpoint          = "enabled"
+    http_tokens            = "required"
+    instance_metadata_tags = "enabled"
   }
 
   user_data = base64encode(

@@ -42,17 +42,18 @@ resource "aws_lb" "app" {
 }
 
 resource "aws_lb_target_group" "app" {
-  name                 = local.env
-  port                 = 8080
-  protocol             = "HTTP"
-  vpc_id               = module.vpc.vpc_id
-  deregistration_delay = 60
+  name     = local.env
+  port     = 8080
+  protocol = "HTTP"
+  vpc_id   = module.vpc.vpc_id
 
   health_check {
-    interval = 6
-    path     = "/"
-    port     = "8080"
-    protocol = "HTTP"
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 10
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
   }
 
   tags = local.standard_tags

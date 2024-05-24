@@ -5,7 +5,7 @@ resource "aws_security_group" "app" {
   tags        = local.standard_tags
 }
 
-resource "aws_security_group_rule" "app_ingress_ssh" {
+resource "aws_security_group_rule" "app_ingress_ssh_all" {
   security_group_id = aws_security_group.app.id
   description       = "Allows SSH from everywhere"
   type              = "ingress"
@@ -18,7 +18,7 @@ resource "aws_security_group_rule" "app_ingress_ssh" {
 # ToDo: Allow Ingress from the Security Group of the Load Balancer to the App Security Group in port 8080
 # See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule
 
-# resource "aws_security_group_rule" "app_ingress_lb" {
+# resource "aws_security_group_rule" "app_ingress_http_lb" {
 #   security_group_id        =
 #   description              = "Allows HTTP access from the load balancer"
 #   type                     = "ingress"

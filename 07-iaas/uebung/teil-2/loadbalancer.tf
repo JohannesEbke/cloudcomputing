@@ -23,17 +23,18 @@
 # See: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group
 
 # resource "aws_lb_target_group" "app" {
-#   name                 =
-#   port                 =
-#   protocol             =
-#   vpc_id               =
-#   deregistration_delay = 60
-
+#   name     =
+#   port     =
+#   protocol =
+#   vpc_id   =
+#
 #   health_check {
-#     interval = 6
-#     path     =
-#     port     =
-#     protocol =
+#     healthy_threshold   =
+#     unhealthy_threshold =
+#     interval            =
+#     path                =
+#     port                =
+#     protocol            =
 #   }
 #
 #   tags = local.standard_tags

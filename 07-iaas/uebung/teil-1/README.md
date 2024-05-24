@@ -4,7 +4,7 @@
 
 ## Ziel
 
-Ziel dieser Übung ist, dass Sie ein grundsätzliches Verständnis der AWS Cloud und ihrer grundlegendsten IaaS Komponenten erlangen. Ihre Aufgabe ist es ein virtuelles Netz, eine AutoScaling Gruppe mit mehreren Maschinen und einen LoadBalancer zu erzeugen um eine minimale Webanwendung bereitzustellen. Im Anschluss werden Sie die AWS CLI verwenden um Ihre Anwendung zu skalieren und per SSH zu verändern.
+Ziel dieser Übung ist, dass Sie ein grundsätzliches Verständnis der AWS Cloud und ihrer grundlegendsten IaaS Komponenten erlangen. Ihre Aufgabe ist es ein virtuelles Netz, eine Auto Scaling Group mit mehreren Maschinen und einen Load Balancer zu erzeugen um eine minimale Webanwendung bereitzustellen. Im Anschluss werden Sie die AWS CLI verwenden um Ihre Anwendung zu skalieren und per SSH zu verändern.
 
 ## Voraussetzungen
 
@@ -33,35 +33,31 @@ Verwenden Sie bei der Namenswahl keine Sonderzeichen außer `-` und vermeiden Si
 
 In diesem Teil der Übung erstellen Sie ein virtuelles Netzwerk, mit einem einzelnen Subnetz mit Internet Zugriff.
 
-> [!IMPORTANT]
-> Verwenden Sie nicht den VPC Launch Wizard.
-> Ziel dieser Übung ist, dass Sie sich mit den Einzelkomponenten vertraut machen und den Wert von Automatisierung kennenlernen.
-
-1. Klicken Sie in der Menubar auf _Services_, wählen Sie _VPC_ > _Your VPCs_ > Create _VPC_.
+1. Klicken Sie in der Menubar auf _Services_, wählen Sie _VPC_ > _Your VPCs_ > _Create VPC_.
     * Vergeben Sie einen eindeutigen Namen, mit dem Sie ihr Netzwerk wiederfinden z.B. _akrause_.
     * Verwenden Sie den IPV4 Adressbereich `10.0.0.0/16`.
-    * Klicken Sie auf erstellen.
-      Nach dem erstellen werden Sie feststellen, dass über das Netz hinaus weitere Standard Cloud Ressourcen angelegt wurden z.B. eine Routing Tabelle.
+    * Klicken Sie auf _Create VPC_.
+      Nach dem Erstellen werden Sie feststellen, dass über das Netz hinaus weitere Standard Cloud Ressourcen angelegt wurden z.B. eine Routing Tabelle.
 
 2.
-    * a) Klicken Sie in der Seitenleiste auf _Subnets_, wähle Sie _Create Subnet_.
-        * Verwenden Sie wieder Ihren eindeutigen Namen.
+    * a) Klicken Sie in der Seitenleiste auf _Subnets_, wähle Sie _Create subnet_.
         * Wählen Sie das von Ihnen erstellte VPC als Ziel für ihr Subnetz.
-        * Wählen Sie als VPC ihr gerade erstelltes Netz.
+        * Verwenden Sie wieder Ihren eindeutigen Namen.
         * Wählen Sie als _Availability Zone_ die Zone _eu-central-1a_.
         * Wählen Sie den Adressbereich kleiner als den Ihres VPC z.B. die Hälfte: `10.0.0.0/17`.
+        * Klicken Sie auf _Create subnet_.
         * Nach der Erstellung, markieren Sie ihr Netz und klicken Sie nun bei _Actions_ die Option _Edit subnet settings_ und aktivieren Sie den Haken bei _Enable auto-assign public IPv4 address_.
     * b) Wiederholen Sie die Schritte in 2a um ein Netz in _eu-central-1b_ mit dem Adressbereich `10.0.128.0/17` zu erzeugen.
 
-3. Erzeugen Sie nun einen Zugang zum Internet indem Sie in der Seitenleiste auf _Internet Gateways_ klicken und dann _Create Internet Gateway Klicken_.
+3. Erzeugen Sie nun einen Zugang zum Internet indem Sie in der Seitenleiste auf _Internet gateways_ klicken und dann auf _Create internet gateway_ Klicken.
     * Verwenden Sie wieder Ihren eindeutigen Namen.
     * Nach dem Erstellen klicken Sie oben rechts auf _Actions_ und wählen Sie _Attac to VPC_.
     * Wählen Sie ihr VPC und bestätigen Sie.
 
-4. Klicken Sie nun in der Seitenleiste auf _Route Tables_ und fügen Sie an die Tabelle für Ihr VPC eine weitere Regel ein, die allen Traffic (`0.0.0.0/0`) zu dem von Ihnen erstellten Internet Gateway routed.
+4. Klicken Sie nun in der Seitenleiste auf _Route tables_ und fügen Sie an die Tabelle für Ihr VPC eine weitere Regel ein, die allen Traffic (`0.0.0.0/0`) zu dem von Ihnen erstellten Internet Gateway routed.
    Die Reihenfolge der Regeln ist hierbei irrelevant, spezifischere greifen zuerst.
 
-#### Einen LoadBalancer erstellen
+#### Einen Load Balancer erstellen
 
 In diesem Teil der Übung erstellen Sie einen Load Balancer der die Anfragen über die aktuell service-fähigen Instanzen verteilt.
 
@@ -71,29 +67,35 @@ In diesem Teil der Übung erstellen Sie einen Load Balancer der die Anfragen üb
     * Als Beschreibung ist _"Security Group fuer den Load Balancer."_ geeignet.
     * Unter _VPC_ Wählen Sie ihr VPC aus.
     * Fügen Sie eine Inbound Rule ein, die den Zugriff per Port `80`, also HTTP, von `0.0.0.0/0`, d.h. beliebiger IP, erlaubt.
+    * Klicken Sie auf _Create security group_.
 
 2. Klicken Sie auf der Seitenleiste auf _Load Balancers_ und wählen Sie _Create Load Balancer_.
     * Wählen Sie den Typ _Application Load Balancer_.
     * Verwenden Sie wieder Ihren eindeutigen Namen.
-    * Wählen Sie unter Availability Zones Ihr Netz und Ihre Subnetze aus.
-    * Wählen Sie im Folgeschritt _Configure Security Groups_ nur Ihre `loadbalancer-<Ihre Eindeutiger Name>` Security Gruppe aus.
-    * Im Schritt _Configure Routing_ wählen Sie das Erstellen einer neuen Target Group und verwenden Sie wieder Ihren eindeutigen Namen.
+    * Wählen Sie unter _Network mapping_ Ihr VPC und Ihre Subnetze aus.
+    * Wählen Sie unter _Security groups_ nur Ihre `loadbalancer-<Ihre Eindeutiger Name>` Security Group aus.
+    * Erstellen Sie unter _Listeners and routing_ eine neue Target Group und verwenden Sie dafür wieder Ihren eindeutigen Namen.
       * Unter _Basic configuration_
         * Wählen Sie den Typ `Instances`.
         * Wählen Sie das Protokoll `HTTP`.
         * Wählen Sie den Port `8080`.
       * Unter _Health checks_
         * Wählen Sie das Protokol `HTTP`.
+        * Wählen Sie den Pfad `/`.
       * Unter _Advanced health check settings_
+        * Wählen Sie den Port `Traffic port`.
         * Setzen Sie den _Healthy threshold_ auf `2`.
         * Setzen Sie den _Unhealthy threshold_ auf `2`.
         * Setzen Sie das _Interval_ auf `10 seconds`.
-    * Es ist nicht notwendig _Targets_ zu registrieren, dies übernimmt die AutoScaling Gruppe, schließen Sie den Vorgang ab.
+      * Es ist nicht notwendig _Targets_ zu registrieren, da dies die Auto Scaling Group übernimmt.
+      * Schließen Sie den Vorgang ab, indem sie auf _Create target group_ klicken.
+    * Wählen Sie die zuvor erstellte Target Group aus.
+    * Klicken Sie abschließend auf _Create load balancer_.
 
-#### Eine AutoScaling Gruppe einrichten
+#### Eine Auto Scaling Group einrichten
 
-In diesem Teil der Übung erstellen Sie eine AutoScaling Gruppe, welche Ihnen erlaubt Ihre Instanzen bequem zu skalieren und auszutauschen.
-Darüber hinaus meldet Ihre AutoScaling Gruppe Ihre Instanzen bei der Target Group des Load Balancers an.
+In diesem Teil der Übung erstellen Sie eine Auto Scaling Group, welche Ihnen erlaubt Ihre Instanzen bequem zu skalieren und auszutauschen.
+Darüber hinaus meldet Ihre Auto Scaling Group Ihre Instanzen bei der Target Group des Load Balancers an.
 
 1. Erstellen Sie eine weitere Security Group.
     * Benennen Sie die Gruppe nach dem Schema `app-<Ihr Eindeutiger Name>`.
@@ -101,14 +103,15 @@ Darüber hinaus meldet Ihre AutoScaling Gruppe Ihre Instanzen bei der Target Gro
     * Unter _VPC_ Wählen Sie ihr VPC aus.
     * Fügen Sie eine Inbound Rule ein, die den Zugriff per Port `22`, also SSH, von `0.0.0.0/0`, d.h. beliebiger IP, erlaubt.
     * Fügen Sie eine weitere Inbound Rule ein, die den Zugriff per Port `8080`, von der Security Group des Load Balancers erlaubt.
+    * Klicken Sie auf _Create security group_.
 
 2. Klicken Sie in der Seitenleiste auf den Eintrag _Launch Templates_ > _Create Launch Template_.
     * Verwenden Sie wieder Ihren eindeutigen Namen.
-    * Als Beschreibung ist "Launch Template für eine einfache Web Anwendung" geeignet.
-    * Wählen Sie als _AMI_ ein Ubuntu: `ami-01e444924a2233b07`.
-    * Wählen Sie `t2.micro` als Instanztyp
-    * Wählen Sie Ihre Security Group für die Applikation.
-    * Verwenden Sie das folgende Skript als _User Data_ unter den _Advanced Details_:
+    * Als Beschreibung ist "Launch Template fuer eine einfache Web Anwendung." geeignet.
+    * Wählen Sie unter _Application and OS Images_ ein Ubuntu als _AMI_. Zum Beispiel `ami-01e444924a2233b07`.
+    * Wählen Sie unter _Instance type_ `t2.micro`.
+    * Wählen Sie unter _Network settings_ Ihre Security Group für die Applikation.
+    * Verwenden Sie unter _Advanced details_ das folgende Skript als _User Data_:
 
       ``` shell
       #!/bin/bash
@@ -127,15 +130,18 @@ Darüber hinaus meldet Ihre AutoScaling Gruppe Ihre Instanzen bei der Target Gro
       nohup busybox httpd -f index.html -p 8080 &
       ```
 
-    * Schließen Sie den Vorgang ab.
+    * Schließen Sie den Vorgang über _Create launch template_ ab.
 
 3. Gehen Sie nun in der Seitenleiste auf den Eintrag _Auto Scaling Groups_ und klicken danach auf _Create Auto Scaling group_.
-    * _Step 1_: Verwenden Sie wieder Ihren eindeutigen Namen.
-      Wäheln Sie ihr Launch Template.
-    * _Step 2_: Wählen Sie die von Ihnen erzeugten Komponenten aus: VPC, **beide** Subnets.
-    * _Step 3_: Zum verwenden Ihrer Target Group setzen Sie bei Schritt _Load Balancing_ den Haken bei _Attach to an existing load balancer_ und wählen Ihre Target Group. Setzen Sie auf dieser Seite auch den Haken bei _ELB_ unter _Health Checks_.
-    * _Step 4_:Setzen Sie die maximale Kapazität auf `4`, die minimale auf `0` und die gewünschte auf `2`.
-    * Schließen Sie den Vorgang nun ab. Nach Erstellung sollten nun nach einiger Zeit zwei Instanzen nach Ihren Spezifikationen erzeugt werden.
+    * Verwenden Sie wieder Ihren eindeutigen Namen.
+    * Wäheln Sie das von Ihnen erstellte Launch Template.
+    * Wählen Sie Ihr VPC, sowie **beide** Subnetz aus.
+    * Zum verwenden Ihrer Target Group setzen Sie unter _Load Balancing_ den Haken bei _Attach to an existing load balancer_ und wählen Ihre Target Group.
+    * Setzen Sie unter _Health Checks_ den Haken bei _Turn on Elastic Load Balancing health checks_.
+    * Setzen Sie die maximale Kapazität auf `4`, die minimale auf `0` und die gewünschte auf `2`.
+    * Schließen Sie den Vorgang nun ab.
+
+Nach Erstellung sollten nun nach einiger Zeit zwei Instanzen nach Ihren Spezifikationen erzeugt werden.
 
 #### Funktionstest
 
@@ -156,7 +162,7 @@ Darüber hinaus meldet Ihre AutoScaling Gruppe Ihre Instanzen bei der Target Gro
     * Sie sind jetzt mit einer Shell Session auf dem Host verbunden.
     * Auf dem Host läuft ein `httpd` service der die Webseite hostet.
       Stoppen Sie den Prozess.
-    * Was können Sie an der Target Group, AutoScaling Gruppe und an Ihren Instanzen beobachten? Wie verhält sich die Webseite währenddessen?
+    * Was können Sie an der Target Group, Auto Scaling Group und an Ihren Instanzen beobachten? Wie verhält sich die Webseite währenddessen?
 
 Lösung Prozess stoppen:
 
@@ -245,7 +251,7 @@ In Ihrer Docker-Umgebung ist das Kommandozeilen-Programm (`aws`) installiert, we
 
 Stellen Sie sich nun vor Sie sind für den zuverlässigen Betrieb des von Ihnen heute erstellten _Dragon Service_ im Auftrag eines Geldgebers verantwortlich.
 Ihr Geldgeber stellt nun fest, dass die Nutzerzahlen Ihres Services zurückgehen und will daher Geld sparen - er ist bereit eine geringere Verfügbarkeit in Kauf zu nehmen.
-Reduzieren Sie daher die Anzahl der Instanzen in der AutoScaling Gruppe auf `1` statt `2`.
+Reduzieren Sie daher die Anzahl der Instanzen in der Auto Scaling Group auf `1` statt `2`.
 Nutzen Sie `aws autoscaling help` um ein Kommando zusammenzustellen.
 
 Lösung:
@@ -304,7 +310,7 @@ Gehen Sie wieder im Browser auf die Adresse Ihres Load Balancers um Ihre Änderu
 
 Der Pinguin kommt gut an und die Nutzer Zahlen steigen.
 Ihr Geldgeber möchte die Last mit einer weiteren Instanz abfangen.
-Skalieren Sie mit der Kommandozeile Ihre AutoScaling Gruppe auf `2`.
+Skalieren Sie mit der Kommandozeile Ihre Auto Scaling Group auf `2`.
 
 Lösung:
 
@@ -329,7 +335,7 @@ Was werden Ihre Nutzer sehen, sobald die zusätzliche Instanz nach einigen Minut
 > Die Webseite antwortet abwechselnd mit der alten und neuen Version des Dienstes.
 > Der Load Balancer verteilt die Last abwechselnd auf die Instanzen.
 >
-> Wenn Sie Instanzen in einer AutoScaling Gruppe ändern wollen sollten Sie zunächst das Launch Template anpassen und dann die Instanzen rollierend austauschen.
+> Wenn Sie Instanzen in einer Auto Scaling Group ändern wollen sollten Sie zunächst das Launch Template anpassen und dann die Instanzen rollierend austauschen.
 >
 > 1. Erst eine neue Instanz hinzufügen.
 > 2. Warten bis Sie beim Load Balancer getestet und in die Rotation aufgenommen wurde.

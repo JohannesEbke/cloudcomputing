@@ -14,23 +14,21 @@ Terraform-Modulen - dies kann für die Arbeit zur ZV nützlich sein.
 
 Zusatzaufgabe: Wechseln Sie die eingesetzte Sprache, z.B. auf Python.
 
-## OpenFaaS
+## Knative
 
-Diese Übung beschäftigt sich mit OpenFaaS ( https://www.openfaas.com/ ), einer Serverlessplattform 
-für Kubernetes oder OpenShift mit Fokus auf Einfachheit.
+Diese Übung beschäftigt sich mit Knative ( https://knative.dev/ ), einer Serverlessplattform 
+für Kubernetes oder OpenShift.
 
-1. Installieren sie zunächst auf Ihrem Kubernetes OpenFaaS. Folgen sie hierzu den Anweisungen der
-Dokumentation zum Deployment auf Kubernetes: https://docs.openfaas.com/deployment/kubernetes/
-Sie können mit dem Abschnitt "Install the faas-cli" beginnen.
+1. Installieren sie zunächst auf Ihrem Kubernetes Knative. Folgen sie hierzu den Anweisungen der
+Dokumentation zum Quickstart: https://knative.dev/docs/getting-started/quickstart-install/
 
-2. Folgen sie anschließend den Anweisungen der im "Lab 3" des OpenFaaS-Workshops:
-https://github.com/openfaas/workshop/blob/master/lab3.md
-Dort können sie eine einfache Funktion in in Python schreiben.
+2. Folgen sie anschließend den Anweisungen von https://knative.dev/docs/getting-started/build-run-deploy-func/
+Dort können sie eine einfache Funktion in Go oder Python schreiben.
 
 Achtung:
 Da DockerHub nicht mehr kostenfrei nutzbar ist, müssen Sie das GitLab-LRZ verwenden, um Ihre Docker Images zu speichern.
 Sie können dafür ein individuelles Projekt anlegen, auf dem Sie dann die "Docker Registry" in den Einstellungen aktivieren.
-Nutzen Sie dann https://docs.openfaas.com/reference/private-registries/ mit einem neuen GitLab-Token, so dass OpenFaaS
+Nutzen Sie dann https://docs.openfaas.com/reference/private-registries/ mit einem neuen GitLab-Token, so dass Knative
 auch auf diese Registry zugreifen kann.
 
 ## Serverless Framework

@@ -1,19 +1,19 @@
 package de.qaware.cloudcomputing.tle;
 
-import com.github.amsacode.predict4java.SatPos;
 import io.opentelemetry.instrumentation.annotations.SpanAttribute;
-import io.smallrye.mutiny.Uni;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 
-@Path("/prediction")
-@RegisterRestClient(baseUri = "http://localhost:8080")
+@Path("/tle")
+@RegisterRestClient(configKey="tle-fetcher")
 public interface TleClient {
 
     @GET
     @Path("/{satelliteId}")
-    Uni<SatPos> predict(@PathParam("satelliteId") @SpanAttribute int satelliteId);
+    @WithSpan
+    TleMember getRecord(@PathParam("satelliteId") @SpanAttribute int satelliteId);
 }

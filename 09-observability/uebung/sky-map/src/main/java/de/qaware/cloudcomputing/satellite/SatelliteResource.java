@@ -1,28 +1,22 @@
 package de.qaware.cloudcomputing.satellite;
 
+import com.github.amsacode.predict4java.SatPassTime;
 import com.github.amsacode.predict4java.SatPos;
+import de.qaware.cloudcomputing.parser.SatPosCalculator;
 import de.qaware.cloudcomputing.tle.TleClient;
-import io.opentelemetry.instrumentation.annotations.SpanAttribute;
+import de.qaware.cloudcomputing.tle.TleMember;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
-import io.smallrye.mutiny.Uni;
 import lombok.extern.jbosslog.JBossLog;
-import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
-import org.apache.commons.math3.geometry.euclidean.threed.SphericalCoordinates;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jboss.resteasy.reactive.RestResponse;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.MediaType;
-
-import java.util.AbstractMap;
-import java.util.Map;
-
-import static org.apache.commons.math3.geometry.euclidean.threed.Vector3D.PLUS_J;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.core.MediaType;
 
 @JBossLog
 @Consumes(MediaType.APPLICATION_JSON)
@@ -34,18 +28,40 @@ public class SatelliteResource {
     @RestClient
     TleClient tleClient;
 
+    @Inject
+    SatPosCalculator satPosCalculator;
+
     @GET
+    @Path("/{satelliteId}/pass/next")
     @WithSpan
-    @Path("/{satelliteId}")
-    public Uni<SatPos> getPrediction(@PathParam("satelliteId") @SpanAttribute int satelliteId) {
-        return tleClient.predict(satelliteId)
-            .invoke(this::log)
-            .onFailure().invoke(log::error);
-
+    public RestResponse<SatPassTime> getNextPass(@PathParam("satelliteId") int satelliteId) {
+        try {
+            TleMember tleRecord = tleClient.getRecord(satelliteId);
+            logResponse(tleRecord);
+            return RestResponse.ok(satPosCalculator.getNextPass(tleRecord));
+        } catch (Exception e) {
+            log.error(e);
+            return RestResponse.serverError();
+        }
     }
 
-    private void log(SatPos satPos) {
-        log.info(satPos);
+    @GET
+    @Path("/{satelliteId}/pos")
+    @WithSpan
+    public RestResponse<SatPos> getSatPosition(@PathParam("satelliteId") int satelliteId) {
+        try {
+            TleMember tleRecord = tleClient.getRecord(satelliteId);
+            logResponse(tleRecord);
+            SatPos satPos = satPosCalculator.getSatPos(tleRecord);
+            return RestResponse.ok(satPos);
+        } catch (Exception e) {
+            log.error(e);
+            return RestResponse.serverError();
+        }
     }
 
+    private void logResponse(TleMember tleMember) {
+        log.info(tleMember);
+
+    }
 }

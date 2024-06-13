@@ -2,7 +2,7 @@ package de.qaware.cloudcomputing.tle;
 
 import lombok.Data;
 
-import javax.json.bind.annotation.JsonbProperty;
+import jakarta.json.bind.annotation.JsonbProperty;
 import java.util.Date;
 
 @Data

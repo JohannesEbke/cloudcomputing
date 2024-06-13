@@ -28,8 +28,8 @@ dependencies {
 
     implementation("io.quarkus:quarkus-micrometer-registry-prometheus")
 
-    compileOnly("org.projectlombok:lombok:1.18.26")
-    annotationProcessor("org.projectlombok:lombok:1.18.26")
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
 
     implementation("com.github.davidmoten:predict4java:1.3.1")
     implementation("org.apache.commons:commons-math3:3.6.1")

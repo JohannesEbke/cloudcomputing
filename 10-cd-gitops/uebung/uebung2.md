@@ -53,7 +53,7 @@ Legen Sie in der ArgoCD-UI eine neue Application an. Füllen Sie die Felder dazu
 * Source
     * Repository URL: https://github.com/USER/REPO
     * Revision: HEAD
-    * Path: k8s
+    * Path: kustomize
 * Destination
     * Cluster-URL: https://kubernetes.default.svc
     * Namespace: default

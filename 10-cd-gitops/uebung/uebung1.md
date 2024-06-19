@@ -126,10 +126,10 @@ Schreiben Sie eine Kubernetes-Deployment-Konfiguration, also eine YAML-Datei mit
 die mindestens eine Instanz Ihrer Anwendung im Cluster deployed. Der Einfachheit halber können Sie als
 Image Tag immer `latest` verwenden, also z.B. `image: ghcr.io/NAME/REPO:latest`
 
-Legen Sie die Datei unter `k8s/deployment.yaml` ab.
+Legen Sie die Datei unter `kustomize/deployment.yaml` ab.
 
 <details>
-<summary>Cheat: k8s/deployment.yaml</summary>
+<summary>Cheat: kustomize/deployment.yaml</summary>
 
 ```yaml
 apiVersion: apps/v1
@@ -155,7 +155,7 @@ spec:
       containers:
         - name: bookstore
           image: ghcr.io/0xqab/cloud-computing-bookstore:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           startupProbe:
             httpGet:
               path: /actuator/health/readiness
@@ -185,6 +185,12 @@ spec:
               memory: 512Mi
 ```
 </details>
+
+Legen Sie eine Datei `kustomize/kustomization.yaml` mit folgendem Inhalt an:
+```yaml
+resources:
+  - deployment.yaml
+```
 
 
 ### Installation des GitHub Runners
@@ -300,18 +306,18 @@ jobs:
 
       - name: Setup kubeconfig
         run: |
-          echo '${{ secrets.KUBE_CONFIG }}' > kubeconfig.yaml
-          chmod 600 kubeconfig.yaml
+          echo '${{ secrets.KUBE_CONFIG }}' > ./kubeconfig.yaml
+          chmod 600 ./kubeconfig.yaml
 
       - name: Apply kubernetes files
         env:
           KUBECONFIG: kubeconfig.yaml
         run: |
-          kubectl apply -f k8s/deployment.yaml
+          kubectl apply --kustomize ./kustomize
 
       - name: Post kubeconfig
         if: always()
-        run: rm -f kubeconfig.yaml
+        run: rm -f ./kubeconfig.yaml
 ```
 </details>
 

@@ -1,17 +1,86 @@
 # Übung 2 – GitOps
 
-In dieser Übung wollen wir GitOps mit Flux in Kubernetes kennenlernen. 
-Wir werden Flux lokal in den Kind-Cluster installieren und dann auf dem GitOps Weg Applikationen deployen. 
-Zu guter Letzt deployen wir das Weave-GitOps-Dashboard aka die Flux UI. 
+In dieser Übung wollen wir GitOps mit ArgoCD und Flux in Kubernetes kennenlernen. 
+Wir werden ArgoCD und Flux lokal in den Kind-Cluster installieren und dann auf dem GitOps Weg Applikationen deployen.
 
-## Voraussetzungen
+## ArgoCD
 
-Erstelle ein public repository auf Github. Du kannst das repo nach der Übung wieder löschen. 
-Erstelle einen Personal Access Token, der 
-- Schreibzugriff auf das Repository hat
-- SSH deployment keys hinzufügen darf
+Installieren Sie ArgoCD in ihrem lokalen Kind Cluster.
+Folgen Sie dazu der [ArgoCD Anleitung](https://argo-cd.readthedocs.io/en/stable/getting_started/)
+und verwenden Sie eine der vorgeschlagenen Methoden, um ArgoCD lokal erreichbar zu machen.
 
-## Flux CLI installieren
+Sie erreichen ArgoCD dann unter https://localhost/ bei Load-Balancer oder https://localhost:8080/ mit Port-Forward.
+
+Das Passwort zum Einloggen können Sie direkt aus dem Secret auslesen 
+oder sich über `argocd admin initial-password -n argocd` auf der Konsole ausgeben lassen.
+
+### PodInfo deployen
+
+Legen Sie in der ArgoCD-UI eine neue Application an. Füllen Sie die Felder dazu wie folgt aus:
+
+* General 
+  * Application Name: podinfo 
+  * Project Name: default
+  * Sync Policy: Automatic
+      * Prune Resources: yes
+      * Self Heal: yes
+* Source 
+  * Repository URL: https://github.com/stefanprodan/podinfo
+  * Revision: HEAD 
+  * Path: kustomize 
+* Destination 
+  * Cluster-URL: https://kubernetes.default.svc
+  * Namespace: default
+
+Klicken Sie dann oben auf Create und wählen Sie die neue Applikation aus. Machen Sie sich mit der UI vertraut.
+
+### Ihre eigene Anwendung deployen
+
+Legen Sie in Ihrem Service aus Aufgabe 1 im Verzeichnis `k8s` eine Datei `kustomization.yaml` mit folgendem Inhalt an:
+```yaml
+resources:
+  - deployment.yaml
+```
+
+Legen Sie in der ArgoCD-UI eine neue Application an. Füllen Sie die Felder dazu wie folgt aus:
+
+* General
+    * Application Name: bookstore
+    * Project Name: default
+    * Sync Policy: Automatic
+      * Prune Resources: yes
+      * Self Heal: yes
+* Source
+    * Repository URL: https://github.com/USER/REPO
+    * Revision: HEAD
+    * Path: k8s
+* Destination
+    * Cluster-URL: https://kubernetes.default.svc
+    * Namespace: default
+
+Klicken Sie dann oben auf Create und wählen Sie die neue Applikation aus. Machen Sie sich mit der UI vertraut.
+
+### Deinstallation
+
+Deinstallieren Sie ArgoCD wie folgt:
+```shell
+kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml` wieder deinstallieren.
+kubectl delete deployment podinfo
+kubectl delete deployment bookstore
+```
+
+## Flux
+
+Flux hat im Gegensatz zu ArgoCD keine UI, ist dafür aber mächtiger. Es gibt einige Drittanbieter-UIs, 
+die beliebte flux UI ist mit dem unklaren Fortbestand von Weaveworks allerdings ohne Maintainer. 
+Als Alternative bietet sich Capacitor an.
+
+### Voraussetzungen
+
+Erstellen Sie ein [Personal Access Token](https://github.com/settings/tokens) mit Scope `repo`.
+Flux wird damit automatisch ein Repository auf Github anlegen. Sie können das Token und Repo nach der Übung wieder löschen.
+
+### Flux CLI installieren
 Flux besteht aus einer CLI und mehreren Server-Komponenten im Kubernetes.
 Für die Installation wird die Flux CLI benötigt. 
 Folgen Sie der [Anleitung](https://fluxcd.io/flux/get-started/#install-the-flux-cli) und installieren Sie die CLI. 
@@ -19,50 +88,79 @@ Folgen Sie nachfolgend dem Flux [Getting Started Guide](https://fluxcd.io/flux/g
 Sie sollten nach Abschluss dieses Abschnitts 
 - die Flux CLI installiert haben
 - Flux in Kind installiert haben
-- ihr public repository als cluster state verwenden
-- die PodInfo Applikation mit Flux deployed haben
+- ihr Repository als Cluster State verwenden
 
-## Flux UI installieren
-In diesem Abschnitt wollen wir die Flux UI installieren. 
-Dafür wird eine weitere CLI benötigt, die `gitops` CLI. 
-Installieren Sie die CLI nach folgender [Anleitung](https://docs.gitops.weave.works/docs/next/open-source/getting-started/install-OSS/#install-the-gitops-cli).
+### PodInfo deployen
 
-Die CLI sollte auf dem Pfad liegen, um nachfolgende Schritte einfacher zu gestalten. 
+Legen Sie dazu unter clusters/my-cluster folgende zwei Dateien mit dem vorgegebenen Inhalt an:
 
-Innerhalb Ihres cluster state repositories führen Sie dann folgenden Befehl aus: 
-```shell
-PASSWORD="pick your password"
-gitops create dashboard ww-gitops \
-  --password=$PASSWORD \
-  --export > ./clusters/my-cluster/weave-gitops-dashboard.yaml
+<details>
+<summary>podinfo-kustomization.yaml</summary>
+
+```yaml
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  interval: 30m0s
+  path: ./kustomize
+  prune: true
+  retryInterval: 2m0s
+  sourceRef:
+    kind: GitRepository
+    name: podinfo
+  targetNamespace: default
+  timeout: 3m0s
+  wait: true
+```
+</details>
+
+<details>
+<summary>podinfo-source.yaml</summary>
+
+```yaml
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: master
+  url: https://github.com/stefanprodan/podinfo
+```
+</details>
+
+Committen Sie die Änderungen und warten Sie zwei Minuten, bis flux die Änderungen angezogen hat.
+
+
+### Ihre eigene Anwendung deployen
+
+Deployen Sie die Anwendung aus Übung 1 im Cluster.
+
+Legen Sie in Ihrem Service aus Aufgabe 1 im Verzeichnis `k8s` eine Datei `kustomization.yaml` mit folgendem Inhalt an:
+```yaml
+resources:
+  - deployment.yaml
 ```
 
-Das erstellt Ihnen ein Manifest, dass mittels des Helm-Controllers die Weave-UI deployed.
-Committen und Pushen Sie Ihre Änderungen. 
+Legen Sie im Repo fleet-infra unter clusters/my-cluster die Dateien `bookstore-kustomization.yaml` und `bookstore-source.yaml` an
+und füllen Sie sie mit passendem Inhalt.
 
-Es kann etwas dauern, bis alles deployed wurde. 
-Bei Erfolg, sollte folgender Befehl: 
-```shell
-kubectl get pods -n flux-system
-```
-
-ungefähr so aussehen: 
-```shell
-NAME                                       READY   STATUS    RESTARTS   AGE
-helm-controller-5bfd65cd5f-gj5sz           1/1     Running   0          10m
-kustomize-controller-6f44c8d499-s425n      1/1     Running   0          10m
-notification-controller-844df5f694-2pfcs   1/1     Running   0          10m
-source-controller-6b6c7bc4bb-ng96p         1/1     Running   0          10m
-ww-gitops-weave-gitops-86b645c9c6-k9ftg    1/1     Running   0          5m
-```
-
-Nun können Sie auf die UI über ein Port-Forwarding zugreifen. 
-```shell
-kubectl port-forward svc/ww-gitops-weave-gitops -n flux-system 9001:9001
-```
-
-Öffnen Sie die UI im Browser unter localhost:9001. 
-Loggen Sie sich mit username `admin` und dem zuvor gewählten Passwort ein. 
-Machen Sie sich mit der UI vertraut. 
+### Bonusaufgaben
 
 Versuchen Sie beispielsweise herauszufinden, warum der PodInfo HorizontalPodAutoscaler nicht richtig funktioniert.
+
+### Deinstallation
+
+Deinstallieren Sie flux wie folgt:
+```shell
+flux uninstall --namespace=flux-system
+kubectl delete deployment podinfo
+kubectl delete deployment bookstore
+```

@@ -1,0 +1,36 @@
+name: Deploy on HM-Kube
+
+on:
+  workflow_dispatch:
+#    inputs:
+#      image-tag:
+#        description: Image tag to deploy (default is latest)
+#        type: string
+#        required: false
+#        default: latest
+
+jobs:
+  deploy:
+    runs-on: arc-runner-set
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Setup kubeconfig
+        run: |
+          echo '${{ secrets.KUBE_CONFIG }}' > kubeconfig.yaml
+          chmod 600 kubeconfig.yaml
+
+      - name: Apply kubernetes files
+        env:
+          KUBECONFIG: kubeconfig.yaml
+        run: |
+          kubectl apply -f k8s/deployment.yaml
+
+      - name: Post kubeconfig
+        if: always()
+        run: rm -f kubeconfig.yaml

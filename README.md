@@ -15,7 +15,7 @@ Inhalte:
 6. [Cluster-Orchestrierung](05-orchestrierung)
 7. [Infrastructure-as-a-Service](07-iaas)
 8. [Serverless](08-serverless)
-9. [Continous Delivery](10-cd)
+9. [Continous Delivery](10-cd-gitops)
 10. [Plattform-as-a-Service](11-paas)
 11. [Big Data: Speicherung und Verarbeitung](99-big-data)
 12. [Programmiermodelle: Reactive Programming](99-programmiermodelle)

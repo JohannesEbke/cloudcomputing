@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: bookstore
+  name: bookstore
+  labels:
+    app: bookstore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookstore
+  strategy:
+    type: RollingUpdate
+  revisionHistoryLimit: 10
+  template:
+    metadata:
+      namespace: bookstore
+      labels:
+        app: bookstore
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: bookstore
+          image: ghcr.io/0xqab/cloud-computing-bookstore:latest
+          imagePullPolicy: IfNotPresent
+          startupProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            periodSeconds: 1
+            failureThreshold: 300
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            periodSeconds: 2
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            periodSeconds: 10
+            failureThreshold: 3
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            limits:
+              memory: 1024Mi
+            requests:
+              cpu: 250m
+              memory: 512Mi

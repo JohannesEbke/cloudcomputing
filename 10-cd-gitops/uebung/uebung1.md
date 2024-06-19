@@ -135,7 +135,6 @@ Legen Sie die Datei unter `k8s/deployment.yaml` ab.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: bookstore
   name: bookstore
   labels:
     app: bookstore
@@ -149,7 +148,6 @@ spec:
   revisionHistoryLimit: 10
   template:
     metadata:
-      namespace: bookstore
       labels:
         app: bookstore
     spec:

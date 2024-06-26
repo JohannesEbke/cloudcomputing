@@ -21,15 +21,13 @@ Bringen Sie die lokale Entwicklung zum Laufen (`heroku local`), so dass sie bequ
 ## Aufgabe 5
 
 Bauen Sie in Ihre Anwendung eine Konfigurationsmöglichkeit ein (z.B. um die Begrüßung zu konfigurieren).
-Verwenden Sie dann die [Heroku-Mechanismen zur Konfiguration](https://devcenter.heroku.com/articles/config-vars) um
-Ihre Anwendung zu konfigurieren.
+Verwenden Sie dann die [Heroku-Mechanismen zur Konfiguration](https://devcenter.heroku.com/articles/config-vars) um Ihre Anwendung zu konfigurieren.
 
 ## (Optional) Aufgabe 6
 
 Verwenden Sie [Heroku Postgres](https://www.heroku.com/postgres), um Ihrer Anwendung eine Datenbank zu spendieren.
 Programmieren Sie einen einfachen Anwendungsfall, der diese Datenbank verwendet.
 
-## Kür: Hephy (a.k.a. Deis) oder Dokku
+## (Kür) Aufgabe 7
 
-Nutzen Sie [Hephy](https://github.com/teamhephy/workflow) oder wahlweise [Dokku](https://dokku.com/)
-um Ihre Applikation auf einen lokalen Minikube o.ä. zu deployen.
+Nutzen Sie [Dokku](https://dokku.com/) um Ihre Applikation auf einen lokalen Minikube o.ä. zu deployen.

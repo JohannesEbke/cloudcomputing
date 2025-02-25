@@ -1,14 +1,11 @@
 #!/bin/bash
 set -euxo pipefail
 
-yum update -y
+dnf update -y
 
-# Enable EPEL for additional packages (like cowsay)
-amazon-linux-extras install epel -y
-
-amazon-linux-extras install nginx1 -y
-yum install -y cowsay
-yum clean all
+dnf install -y cowsay
+dnf install -y nginx
+dnf clean all
 
 cat > /usr/share/nginx/html/index.html <<EOF
 <pre>

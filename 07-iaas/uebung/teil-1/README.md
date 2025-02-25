@@ -108,7 +108,7 @@ Darüber hinaus meldet Ihre Auto Scaling Group Ihre Instanzen bei der Target Gro
 2. Klicken Sie in der Seitenleiste auf den Eintrag _Launch Templates_ > _Create Launch Template_.
     * Verwenden Sie wieder Ihren eindeutigen Namen.
     * Als Beschreibung ist "Launch Template fuer eine einfache Web Anwendung." geeignet.
-    * Wählen Sie unter _Application and OS Images_ ein Ubuntu als _AMI_. Zum Beispiel `ami-01e444924a2233b07`.
+    * Wählen Sie unter _Application and OS Images_ ein Amazon Linux 2023 als _AMI_. Zum Beispiel `ami-07cb013c9ecc583f0`.
     * Wählen Sie unter _Instance type_ `t2.micro`.
     * Wählen Sie unter _Network settings_ Ihre Security Group für die Applikation.
     * Verwenden Sie unter _Advanced details_ das folgende Skript als _User Data_:
@@ -116,18 +116,24 @@ Darüber hinaus meldet Ihre Auto Scaling Group Ihre Instanzen bei der Target Gro
       ``` shell
       #!/bin/bash
       set -euxo pipefail
-
-      apt-get update
-      apt-get install -y busybox cowsay
-      source /etc/environment
-
-      {
-        echo "<pre>"
-        /usr/games/cowsay -f dragon Hello World
-        echo "</pre>"
-      } >> index.html
-
-      nohup busybox httpd -f index.html -p 8080 &
+      
+      dnf update -y
+      
+      dnf install -y cowsay
+      dnf install -y nginx
+      dnf clean all
+      
+      cat > /usr/share/nginx/html/index.html <<EOF
+      <pre>
+      $(/usr/bin/cowsay -f dragon "Hello World")
+      </pre>
+      EOF
+      
+      # Modify nginx configuration to listen on port 8080 instead of 80.
+      sed -i 's/listen\s\+80;/listen 8080;/' /etc/nginx/nginx.conf
+      
+      systemctl enable nginx
+      systemctl restart nginx
       ```
 
     * Schließen Sie den Vorgang über _Create launch template_ ab.
@@ -160,7 +166,7 @@ Nach Erstellung sollten nun nach einiger Zeit zwei Instanzen nach Ihren Spezifik
     * Gehen Sie dazu auf _Instances_ und Markieren (nicht auf die Detail-Ansicht Klicken) Sie einer Ihrer Instanzen.
     * Gehen Sie nun oben rechts auf _Actions_ und wählen Sie _Connect_ und in der folgenden Ansicht nochmals auf _Connect_.
     * Sie sind jetzt mit einer Shell Session auf dem Host verbunden.
-    * Auf dem Host läuft ein `httpd` service der die Webseite hostet.
+    * Auf dem Host läuft ein `nginx` service der die Webseite hostet.
       Stoppen Sie den Prozess.
     * Was können Sie an der Target Group, Auto Scaling Group und an Ihren Instanzen beobachten? Wie verhält sich die Webseite währenddessen?
 
@@ -172,20 +178,21 @@ Lösung Prozess stoppen:
 > Finden Sie als erstes die Prozess Id heraus z.B. mit `ps`:
 >
 > ``` shell
-> ps aux | grep httpd
+> ps aux | grep nginx
 > ```
 >
 > Beispiel Ergebnis:
 >
 > ``` text
-> root        6634  0.0  0.1   2788  1660 ?        S    15:07   0:00 busybox httpd -f index.html -p 8080
-> ubuntu      7287  0.0  0.0   7672   652 pts/0    S+   15:19   0:00 grep --color=auto httpd
+> root        8203  0.0  0.1  15068  1600 ?        Ss   10:53   0:00 nginx: master process /usr/sbin/nginx
+> nginx       8208  0.0  0.3  15504  3308 ?        S    10:53   0:00 nginx: worker process
+> ec2-user   26156  0.0  0.2 222316  2036 pts/0    S+   10:56   0:00 grep --color=auto nginx
 > ```
 >
-> Sie können den Prozess `6634` beenden, hierfür brauchen Sie in diesem Fall Root Rechte:
+> Sie können den Prozess `8203` beenden, hierfür brauchen Sie in diesem Fall Root Rechte:
 >
 > ``` shell
-> sudo kill 6634
+> sudo kill 8203
 > ```
 >
 > Sie können das Fenster schließen.

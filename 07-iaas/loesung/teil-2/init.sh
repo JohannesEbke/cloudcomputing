@@ -1,14 +1,23 @@
 #!/bin/bash
 set -euxo pipefail
 
-apt-get update
-apt-get install -y busybox cowsay
-rm -rf /var/lib/apt/lists/*
+yum update -y
 
-{
-  echo "<pre>"
-  /usr/games/cowsay -f dragon ${message}
-  echo "</pre>"
-} >> index.html
+# Enable EPEL for additional packages (like cowsay)
+amazon-linux-extras install epel -y
 
-nohup busybox httpd -f index.html -p 8080 &
+amazon-linux-extras install nginx1 -y
+yum install -y cowsay
+yum clean all
+
+cat > /usr/share/nginx/html/index.html <<EOF
+<pre>
+$(/usr/bin/cowsay -f dragon "${message}")
+</pre>
+EOF
+
+# Modify nginx configuration to listen on port 8080 instead of 80.
+sed -i 's/listen\s\+80;/listen 8080;/' /etc/nginx/nginx.conf
+
+systemctl enable nginx
+systemctl restart nginx

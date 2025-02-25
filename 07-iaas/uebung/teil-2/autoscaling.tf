@@ -40,7 +40,7 @@ resource "aws_security_group_rule" "app_egress_all" {
 
 resource "aws_launch_template" "app" {
   name                                 = local.env
-  image_id                             = "ami-01e444924a2233b07"
+  image_id                             = "ami-07cb013c9ecc583f0"
   instance_initiated_shutdown_behavior = "terminate"
   update_default_version               = true
   instance_type                        = "t2.micro"

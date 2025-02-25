@@ -1,14 +1,20 @@
 #!/bin/bash
 set -euxo pipefail
 
-apt-get update
-apt-get install -y busybox cowsay
-rm -rf /var/lib/apt/lists/*
+dnf update -y
 
-{
-  echo "<pre>"
-  /usr/games/cowsay -f dragon ${message}
-  echo "</pre>"
-} >> index.html
+dnf install -y cowsay
+dnf install -y nginx
+dnf clean all
 
-nohup busybox httpd -f index.html -p 8080 &
+cat > /usr/share/nginx/html/index.html <<EOF
+<pre>
+$(/usr/bin/cowsay -f dragon "${message}")
+</pre>
+EOF
+
+# Modify nginx configuration to listen on port 8080 instead of 80.
+sed -i 's/listen\s\+80;/listen 8080;/' /etc/nginx/nginx.conf
+
+systemctl enable nginx
+systemctl restart nginx

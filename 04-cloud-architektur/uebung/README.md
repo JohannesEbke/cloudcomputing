@@ -67,7 +67,7 @@ Zuerst müssen sie den Book-Service im Unterverzeichnis `book-service` bauen. Be
 
 Nun können Sie den Container mit dem Docker-Compose File in diesem Verzeichnis bauen und starten:
 ```shell
-docker-compose up --build
+docker compose up --build
 ```
 Testen Sie, dass der Book-Service korrekt gestartet wird.
 Nach dem Start sollten sie den Book-Service direkt auf Port `18080` erreichbar sein. 

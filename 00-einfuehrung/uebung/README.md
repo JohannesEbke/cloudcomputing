@@ -13,7 +13,8 @@ verwendet wird: https://gitlab.lrz.de/hm/devbox/-/wikis/Releases
 1. Eine Java IDE ihrer Wahl, z.B. [IntelliJ Community Edition](https://www.jetbrains.com/de-de/idea/download/other.html)
 1. Docker ([Windows](https://docs.docker.com/docker-for-windows/install/), [Mac](https://docs.docker.com/docker-for-mac/install/), [Linux](https://docs.docker.com/engine/install/))
 1. Kubectl [Anleitung](https://kubernetes.io/docs/tasks/tools/)
-
+1. Terraform [Anleitung](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+1. AWS CLI v2 [Anleitung](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 ## Test des Setups
 
 1. Öffnen Sie eine Console in einem Ordner Ihrer Wahl und geben Sie `git clone https://github.com/JohannesEbke/cloudcomputing.git` ein
@@ -23,4 +24,4 @@ verwendet wird: https://gitlab.lrz.de/hm/devbox/-/wikis/Releases
 1. Importieren Sie die [jdk-test-2/build.gradle](jdk-test-2/build.gradle) in IntelliJ und starten Sie die `main`-Methode
 1. Testen Sie [ihre Docker-Installation](https://docs.docker.com/get-started/#test-docker-version)
 1. Gehen Sie auf das [kube07-Portal](https://kube.cs.hm.edu) und legen Sie dort einen virtuellen Cluster an. Wählen Sie "Actions"/"Connect" und laden sich die `kubeconfig` herunter.
-1. Sorgen Sie dafür dass kubectl die kubeconfig finden kann, und führen Sie zum Test `kubectl get pods --all-namespaces` aus.
+1. Sorgen Sie dafür, dass kubectl die kubeconfig finden kann, und führen Sie zum Test `kubectl get pods --all-namespaces` aus.

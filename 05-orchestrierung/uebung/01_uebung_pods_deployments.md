@@ -12,11 +12,10 @@ Aufgaben:
    * Möglichkeit 3: Falls sie schon Docker Desktop oder Podman Desktop installiert haben, aktivieren Sie das eingebaute Kubernetes in den Einstellungen.
 2. Prüfen Sie, ob der Cluster online ist:
    ```shell
-   $ kubectl version     
-   WARNING: This version information is deprecated and will be replaced with the output from kubectl version --short.  Use --output=yaml|json to get the full version.
-   Client Version: version.Info{Major:"1", Minor:"26", GitVersion:"v1.26.3", GitCommit:"9e644106593f3f4aa98f8a84b23db5fa378900bd", GitTreeState:"clean", BuildDate:"2023-03-15T13:40:17Z", GoVersion:"go1.19.7", Compiler:"gc", Platform:"linux/amd64"}
-   Kustomize Version: v4.5.7
-   Server Version: version.Info{Major:"1", Minor:"25", GitVersion:"v1.25.3", GitCommit:"434bfd82814af038ad94d62ebe59b133fcb50506", GitTreeState:"clean", BuildDate:"2022-10-25T19:35:11Z", GoVersion:"go1.19.2", Compiler:"gc", Platform:"linux/amd64"}
+   $ kubectl version
+   Client Version: v1.32.2
+   Kustomize Version: v5.5.0
+   Server Version: v1.32.2
    ```
 
 3. Machen Sie sich mit der App `Hello-Service` vertraut (siehe [code/hello-service](code/hello-service)).

@@ -1,6 +1,10 @@
 # Lösung 1. Pods & Deployments
 
 Aufgaben:
+1. Erstellung eines Kubernetes Clusters (am Beispiel von kind)
+   ```shell
+    kind create cluster --name cc-2025
+   ```
 
 4. Schreibt ein Kubernetes Deployment
 

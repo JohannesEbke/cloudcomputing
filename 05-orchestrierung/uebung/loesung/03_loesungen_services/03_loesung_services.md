@@ -20,5 +20,32 @@ Bonus:
 
 3. Load Balancing testen
 
-Kommt bald ...
+Füge folgende Dependency zur `pom.xml` hinzu:
 
+```xml
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<version>6.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+```
+
+Ersetze `HelloWorldController.java`:
+```java
+package com.example.demo;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import jakarta.servlet.http.HttpServletRequest;
+
+@RestController
+public class HelloWorldController {
+    @GetMapping("/hello")
+    public String hello(HttpServletRequest clientRequest) {
+        String localIp = clientRequest.getLocalAddr();
+        return  "My ip is " + localIp;
+    }
+}
+
+```

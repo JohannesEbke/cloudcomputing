@@ -17,11 +17,11 @@ Eines für Anfragen zur Lagerhaltung und ein weiteres für die Antworten.
 
 *Hinweis* Was ist ein Amazon Resource Name (ARN)?
 Eine Amazon Resource Name (ARN) ist ein eindeutiger Bezeichner (Identifier) für AWS-Ressourcen. Er besteht aus mehreren Teilen, zum Beispiel:
-`arn:aws:sns:eu-central-1:992382422618:foobar-gmbh-lagerhaltung-antworten`
+`arn:aws:sns:eu-central-1:941377120628:foobar-gmbh-lagerhaltung-antworten`
 * `arn:aws`: – legt fest, dass es sich um eine ARN im AWS-Kontext handelt.
 * `sns`: – bezeichnet den AWS-Dienst, hier Simple Notification Service.
 * `eu-central-1`: – die Region, in der die Ressource liegt.
-* `992382422618`: – die Konto-ID, der die Ressource gehört.
+* `941377120628`: – die Konto-ID, der die Ressource gehört.
 * `foobar-gmbh-lagerhaltung-antworten` – der Name der Ressource (hier das SNS-Topic).
 
 ### AWS CLI Authentication
@@ -50,7 +50,7 @@ Testen Sie, ob die AWS CLI ihre Zugangsdaten findet:
 
 ### Nachrichten senden, empfangen und auch löschen
 
-1. Senden Sie ein paar **unterschiedliche** Nachrichten `aws sqs send-message --queue-url <Ihre-Queue-Url> --message-body "Hallo Cloud Computing"`
+1. Senden Sie ein paar **unterschiedliche** Nachrichten `aws sqs send-message --queue-url "<Ihre-Queue-Url>" --message-body "Hallo Cloud Computing"`
 1. Empfangen Sie alle Nachrichten `aws sqs receive-message  --queue-url <Ihre-Queue-Url>`
 1. Was passiert? Und warum passiert das?
 1. Löschen Sie eine Nachricht. `aws sqs delete-message`
@@ -58,13 +58,14 @@ Testen Sie, ob die AWS CLI ihre Zugangsdaten findet:
 
 ### Berechtigungen 
 
-Zukünftig soll das AWS-SNS-Topic `arn:aws:sns:eu-central-1:992382422618:foobar-gmbh-lagerhaltung-antworten` Nachrichten an die Queue übergeben dürfen.
+Zukünftig soll das AWS-SNS-Topic `arn:aws:sns:eu-central-1:941377120628:foobar-gmbh-lagerhaltung-antworten` Nachrichten an die Queue übergeben dürfen.
 Dafür müssen Sie eine sogenannte Richtlinie (Policy) setzen. Mit der AWS CLI erledigen Sie das über den Befehl: `aws sqs set-queue-attributes`
 1. Speichern Sie die Policy auf Ihre Festplatte und setzen Sie die korrekten Werte ein. 
-    * Ersetzen sie <account-id> 
+    * Ersetzen Sie <account-id> mit der AWS Account ihres Zugangs. 
+    * Ersetzen Sie <name-ihrer-queue> mit dem Namen ihrer Queue. 
 ```json
 {
-  "Policy": "{\"Version\":\"2012-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__owner_statement\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::<account-id>:root\"},\"Action\":\"SQS:*\",\"Resource\":\"arn:aws:sqs:eu-central-1:<account-id>:<name-ihrer-queue>\"},{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"sns.amazonaws.com\"},\"Action\":\"sqs:SendMessage\",\"Resource\":\"arn:aws:sqs:eu-central-1:<account-id>:test-queue\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:eu-central-1:992382422618:foobar-gmbh-lagerhaltung-antworten\"}}}]}"
+  "Policy": "{\"Version\":\"2012-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__owner_statement\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::<account-id>:root\"},\"Action\":\"SQS:*\",\"Resource\":\"arn:aws:sqs:eu-central-1:<account-id>:<name-ihrer-queue>\"},{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"sns.amazonaws.com\"},\"Action\":\"sqs:SendMessage\",\"Resource\":\"arn:aws:sqs:eu-central-1:<account-id>:<name-ihrer-queue>\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:eu-central-1:941377120628:foobar-gmbh-lagerhaltung-antworten\"}}}]}"
 }
 ```
 2. Setzen Sie die Queue-Attribute `aws sqs set-queue-attributes --queue-url <Ihre-Queue-Url> --attributes file://set-queue-attributes.json`
@@ -74,11 +75,11 @@ Dafür müssen Sie eine sogenannte Richtlinie (Policy) setzen. Mit der AWS CLI e
 
 Sie sind jetzt in der Lage auf ihrer Queue Nachrichten zu empfangen, lesen und zu löschen. 
 
-1. Abonnieren Sie das Topic `arn:aws:sns:eu-central-1:992382422618:foobar-gmbh-lagerhaltung-antworten`
+1. Abonnieren Sie das Topic `arn:aws:sns:eu-central-1:941377120628:foobar-gmbh-lagerhaltung-antworten`
 2. Was müssen Sie hier eintragen? Vielleicht hilft Ihnen `aws sns subscribe help`
 ```shell
 aws sns subscribe \
-  -- topic-arn <queue-arn> \ 
+  --topic-arn <queue-arn> \ 
   --protocol <welches Protokol?> \
   --notification-endpoint <welcher endpoint>
 ```

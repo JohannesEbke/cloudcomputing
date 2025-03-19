@@ -52,6 +52,7 @@ public class SqsListener {
     private final SqsClient sqsClient;
     private final String queueUrl = "your-queue-url";
 
+    @Autowired
     public SqsListener(SqsClient sqsClient) {
       this.sqsClient = sqsClient;
     }
@@ -84,7 +85,7 @@ public class SqsListener {
 ## Kür: Nachrichten an die Queue senden.
 
 *Hinweis* Sie können das Versenden von Nachrichten direkt an Ihre AWS SQS später für Testzwecke verwenden. 
-Das eigentliche Ziel ist es natürlich am Ende das SNS Topic `arn:aws:sns:eu-central-1:992382422618:foobar-gmbh-lagerhaltung-anfragen`
+Das eigentliche Ziel ist es natürlich am Ende das SNS Topic `arn:aws:sns:eu-central-1:941377120628:foobar-gmbh-lagerhaltung-anfragen`
 anzubinden. 
 
 * Vielleicht malen Sie sich nochmal eine Skizze, oder erweitern ein bereits von Ihnen erstelltes.
@@ -98,8 +99,9 @@ anzubinden.
 public class ShopController {
     
     private final SqsService sqsService;
-    
-    public ShopController(SnsService sqsService) {
+
+    @Autowired
+    public ShopController(SqsService sqsService) {
         this.sqsService = sqsService;
     }
 
@@ -117,6 +119,7 @@ public class SqsService {
     private final SqsClient sqsClient;
     private final String queueUrl = "";
 
+    @Autowired
     public SqsService(SqsClient sqsClient) {
         this.sqsClient = sqsClient;
     }
@@ -130,3 +133,5 @@ public class SqsService {
 ```shell
 curl -X POST "http://localhost:8080/sns/publish?message=CloudComputingRocks"
 ```
+
+##

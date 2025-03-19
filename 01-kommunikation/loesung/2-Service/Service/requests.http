@@ -1,0 +1,7 @@
+POST http://localhost:8080/webshop/publish?message=CloudComputing%20Rocks
+
+###
+
+POST localhost:8080/webshop/lageranfrage
+
+

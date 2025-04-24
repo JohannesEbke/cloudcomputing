@@ -4,7 +4,6 @@ x-common:
     image: bitnami/etcd:3.5
     entrypoint: /opt/bitnami/etcd/bin/etcd
 
-version: '3.8'
 services:
   change-vol-ownership:
     image: ubuntu

@@ -49,7 +49,7 @@ Ziel dieser Übung ist es, erste praktische Erfahrungen mit Traefik und Consul z
 Dabei wird ein einfacher Spring Cloud REST Service zusammen mit Consul
 für Service Discovery und Configuration und Traeffik als Edge Server aufgesetzt.
 
-Diese Übung orientiert sich an diesem [Tutorial](https://m.mattmclaugh.com/traefik-and-consul-catalog-example-2c33fc1480c0).
+Diese Übung orientiert sich an diesem [Tutorial](https://github.com/mattmcla/traefik-consul).
 
 ## Vorbereitung
 

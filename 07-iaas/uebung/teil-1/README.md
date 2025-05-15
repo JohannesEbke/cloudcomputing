@@ -109,7 +109,7 @@ Darüber hinaus meldet Ihre Auto Scaling Group Ihre Instanzen bei der Target Gro
     * Verwenden Sie wieder Ihren eindeutigen Namen.
     * Als Beschreibung ist "Launch Template fuer eine einfache Web Anwendung." geeignet.
     * Wählen Sie unter _Application and OS Images_ ein Amazon Linux 2023 als _AMI_. Zum Beispiel `ami-07cb013c9ecc583f0`.
-    * Wählen Sie unter _Instance type_ `t2.micro`.
+    * Wählen Sie unter _Instance type_ `t3.micro`.
     * Wählen Sie unter _Network settings_ Ihre Security Group für die Applikation.
     * Verwenden Sie unter _Advanced details_ das folgende Skript als _User Data_:
 
@@ -150,10 +150,6 @@ Darüber hinaus meldet Ihre Auto Scaling Group Ihre Instanzen bei der Target Gro
 Nach Erstellung sollten nun nach einiger Zeit zwei Instanzen nach Ihren Spezifikationen erzeugt werden.
 
 #### Funktionstest
-
-> [!IMPORTANT]
-> Falls Sie MacOS verwenden, dieser Schritt funktioniert nicht mit Safari.
-> Nehmen Sie für diesen Schritt bitte einen anderen Browser.
 
 1. Gehen Sie nun auf Ihre Target Group und klicken Sie auf den Reiter _Targets_.
    Ihre Instanzen sollte hier nach kurzer Zeit als _healthy_ auftauchen.

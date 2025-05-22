@@ -41,7 +41,7 @@ resource "aws_launch_template" "app" {
   #checkov:skip=CKV_AWS_88:EC2 instance should not have public IP
 
   name                                 = local.env
-  image_id                             = "ami-07cb013c9ecc583f0"
+  image_id                             = "ami-07cb013c9ecc583f0" # ami-name: amzn2-ami-hvm-2.0.20250201.0-x86_64-gp2 (search for names in different aws regions to find the image id)
   instance_initiated_shutdown_behavior = "terminate"
   update_default_version               = true
   instance_type                        = "t2.micro"

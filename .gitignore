@@ -7,9 +7,10 @@
 *.iml
 *.ipr
 *.iws
-*.iml
 
-*.iml
+# nix
+.direnv
+result
 
 07-cloud-architektur/uebung/loesung/bin/fabio
 

@@ -26,6 +26,9 @@ dependencies {
     implementation("io.quarkus:quarkus-smallrye-openapi")
     implementation("io.quarkus:quarkus-logging-json")
 
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("io.opentelemetry:opentelemetry-exporter-sender-grpc-managed-channel:1.28.0")
+
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
 
@@ -33,6 +36,7 @@ dependencies {
     implementation("org.apache.commons:commons-math3:3.6.1")
 
     implementation("io.quarkus:quarkus-opentelemetry")
+    implementation("io.quarkus:quarkus-micrometer-opentelemetry")
 }
 
 group = "de.qaware.cloudcomputing"

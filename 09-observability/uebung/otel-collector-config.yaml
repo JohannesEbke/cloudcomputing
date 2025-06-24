@@ -1,0 +1,41 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318    # Listen on OTLP/HTTP
+      grpc:
+        endpoint: 0.0.0.0:4317    # Listen on OTLP/gRPC
+
+processors:
+  batch: {}  # Batch processor, sends telemetry data in batches to improve performance
+
+exporters:
+  # Export metrics as a Prometheus scraping endpoint
+  prometheus:
+    endpoint: "0.0.0.0:9464"
+    # Enable conversion of Resource attributes to metric labels, ensuring service.name etc. appear in Prometheus labels
+    resource_to_telemetry_conversion:
+      enabled: true
+
+  otlphttp/loki:
+    endpoint: "http://loki:3100/otlp"  # Loki's OTLP log receiver HTTP API
+
+  # Export traces to Tempo via OTLP HTTP
+  otlphttp/tempo:
+    endpoint: "http://tempo:4318"
+
+# Define processing pipelines for each type of telemetry data
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus]        # Metrics are processed and exposed in Prometheus format
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp/loki]     # Logs are processed and sent to Loki (OTLP HTTP)
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp/tempo]     # Traces are processed and sent to Tempo (OTLP HTTP)

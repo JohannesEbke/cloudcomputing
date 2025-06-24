@@ -1,0 +1,6 @@
+global:
+  scrape_interval: 5s            # Scraping interval, shortened to 5 seconds to get data faster (default is 1m)
+scrape_configs:
+  - job_name: 'otel-collector'
+    static_configs:
+      - targets: ['otel-collector:9464']   # Target is the Prometheus Exporter port of OTel Collector

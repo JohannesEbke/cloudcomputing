@@ -35,20 +35,22 @@ Die Cloud-Native-Community bewegt sich jedoch zunehmend in Richtung einer Verein
 
 <details> 
 <summary>Tipp</summary>
-Startpunkt Metriken über OTLP: https://quarkus.io/guides/opentelemetry-metrics
-Startpunkt Metrik scrapen: https://exceptionly.com/2022/01/18/monitoring-quarkus-with-prometheus-and-grafana/
+
+* Startpunkt Metriken über OTLP: https://quarkus.io/guides/opentelemetry-metrics
+* Startpunkt Metrik scrapen: https://exceptionly.com/2022/01/18/monitoring-quarkus-with-prometheus-and-grafana/
+
 </details>
 
 ## Übung 3: Traces
 
-1. Traces sind in OTLP sogenannte First-Class Citizens und daher besonders gut integriert.
+1. Traces sind in OTLP First-Class Citizens und daher besonders gut integriert.
    Verwenden Sie die quarkus-opentelemetry-Extension, um Traces direkt an den OTEL-Collector zu senden.
    Dieser ist bereits so konfiguriert, dass er die Traces automatisch an Tempo weiterleitet.
 2. Machen Sie ein paar Aufrufe gegen den laufenden sky-map-Service (http://localhost:8088/`) und prüfen Sie die Traces in Grafana.
    Wie kommen Sie an die Trace-Id?
 3. Informieren Sie sich, wie Sie zusätzliche (Meta-)Daten zu den Traces hinzufügen können und Testen Sie das an einem der Services.
 
-Agent-Konfiguration: https://quarkus.io/guides/opentelemetry-tracing
+Quarkus-Konfiguration: https://quarkus.io/guides/opentelemetry-tracing
 
 ## Bonus-Übung:
 

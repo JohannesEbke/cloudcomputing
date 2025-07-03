@@ -4,7 +4,7 @@ In dieser Übung wollen wir FaaS auf AWS sowie verschiedene FaaS Frameworks auf 
 
 ## FaaS auf AWS: AWS Lambda mit Terraform
 
-Um AWS Lambda aus dem Web ohne Zugriff auf die AWS API aufzurufen, ist es nötig, den API Gateway
+Um AWS Lambda aus dem Web ohne Zugriff auf die AWS API aufzurufen, ist es nötig, das API Gateway
 zu nutzen. Folgen Sie dazu dem folgenden Tutorial:
 
 https://learn.hashicorp.com/tutorials/terraform/lambda-api-gateway

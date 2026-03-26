@@ -26,3 +26,12 @@ Nun kann der zukünftige Webshop die Antworten von der SQS wiederholt abfragen (
 **Vielleicht hilft es Ihnen, sich eine Skizze zu zeichnen?**
 
 ![](paketfluss.drawio.png)
+
+
+*** Lösung: 
+
+```shell
+ns subscribe --topic-arn arn:aws:sns:eu-central-1:941377120628:foobar-gmbh-lagerhaltung-antworten \
+--protocol sqs \
+--notification-endpoint arn:aws:sqs:eu-central-1:<account id>:<name-queue>
+```

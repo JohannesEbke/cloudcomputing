@@ -63,11 +63,14 @@ Dafür müssen Sie eine sogenannte Richtlinie (Policy) setzen. Mit der AWS CLI e
 1. Speichern Sie die Policy auf Ihre Festplatte und setzen Sie die korrekten Werte ein. 
     * Ersetzen Sie <account-id> mit der AWS Account ihres Zugangs. 
     * Ersetzen Sie <name-ihrer-queue> mit dem Namen ihrer Queue. 
+    * Tipp: Öffnen Sie den Inhalt der Escapten-Policy "{\"Version\"....   " in einem Scratch (Strg + Shift + a -> "Scratch File" -> "JSON" ) in IntelliJ und verwenden Sie das "String Manipulation"-Plugin, um die Policy-JSON zu "unesacpen" und nach dem Bearbeiten wieder zu "escapen".
+    * Tipp: Das geht auch mit VSCode - Sie finden ein passendes Plugin.
 ```json
 {
   "Policy": "{\"Version\":\"2012-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__owner_statement\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::<account-id>:root\"},\"Action\":\"SQS:*\",\"Resource\":\"arn:aws:sqs:eu-central-1:<account-id>:<name-ihrer-queue>\"},{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"sns.amazonaws.com\"},\"Action\":\"sqs:SendMessage\",\"Resource\":\"arn:aws:sqs:eu-central-1:<account-id>:<name-ihrer-queue>\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:eu-central-1:941377120628:foobar-gmbh-lagerhaltung-antworten\"}}}]}"
 }
 ```
+
 2. Setzen Sie die Queue-Attribute `aws sqs set-queue-attributes --queue-url <Ihre-Queue-Url> --attributes file://set-queue-attributes.json`
 3. Lesen Sie die Attribute doch mal aus `aws sqs get-queue-attributes --queue-url <Ihre-Queue-Url> --attribute-names All`
 

@@ -63,8 +63,13 @@ Dafür müssen Sie eine sogenannte Richtlinie (Policy) setzen. Mit der AWS CLI e
 1. Speichern Sie die Policy auf Ihre Festplatte und setzen Sie die korrekten Werte ein. 
     * Ersetzen Sie <account-id> mit der AWS Account ihres Zugangs. 
     * Ersetzen Sie <name-ihrer-queue> mit dem Namen ihrer Queue. 
-    * Tipp: Öffnen Sie den Inhalt der Escapten-Policy "{\"Version\"....   " in einem Scratch (Strg + Shift + a -> "Scratch File" -> "JSON" ) in IntelliJ und verwenden Sie das "String Manipulation"-Plugin, um die Policy-JSON zu "unesacpen" und nach dem Bearbeiten wieder zu "escapen".
-    * Tipp: Das geht auch mit VSCode - Sie finden ein passendes Plugin.
+    * Tipp: Mit IntelliJ und dem String Manipulation Plugin können Sie die Policy einfacher bearbeiten:
+      * Öffnen Sie den Inhalt der Escapten-Policy "{\"Version\"....   " in einem Scratch (Strg + Shift + a -> "Scratch File" -> "JSON" )
+      * Einfügen, markieren, Strg + Shift + a -> "unescape JSON" + formatieren (Strg + Alt + L)
+      * Bearbeiten
+      * Strg + Shift + a -> Minify Json 
+      * Strg + Shift + a -> Escape JSON
+    * Tipp: Das geht bestimmt auch mit VSCode und anderen guten Editoren - Sie finden ein passendes Plugin.
 ```json
 {
   "Policy": "{\"Version\":\"2012-10-17\",\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Sid\":\"__owner_statement\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::<account-id>:root\"},\"Action\":\"SQS:*\",\"Resource\":\"arn:aws:sqs:eu-central-1:<account-id>:<name-ihrer-queue>\"},{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"sns.amazonaws.com\"},\"Action\":\"sqs:SendMessage\",\"Resource\":\"arn:aws:sqs:eu-central-1:<account-id>:<name-ihrer-queue>\",\"Condition\":{\"ArnEquals\":{\"aws:SourceArn\":\"arn:aws:sns:eu-central-1:941377120628:foobar-gmbh-lagerhaltung-antworten\"}}}]}"
@@ -82,7 +87,8 @@ Sie sind jetzt in der Lage auf ihrer Queue Nachrichten zu empfangen, lesen und z
 2. Was müssen Sie hier eintragen? Vielleicht hilft Ihnen `aws sns subscribe help`
 ```shell
 aws sns subscribe \
-  --topic-arn <queue-arn> \ 
+  --topic-arn <topic-arn> \ 
   --protocol <welches Protokol?> \
   --notification-endpoint <welcher endpoint>
 ```
+    *Tipp*: Wenn Sie schwierigkeiten 

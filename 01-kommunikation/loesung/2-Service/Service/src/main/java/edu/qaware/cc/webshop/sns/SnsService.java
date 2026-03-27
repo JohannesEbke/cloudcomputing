@@ -27,9 +27,9 @@ public class SnsService {
     }
 
     public String sendWarehouseRequest() throws JsonProcessingException {
-        var item = new Item("Foo-Widget", 3);
+        var item = new Item("Bar-Widget", 3);
         var address = new Address(
-                "DE",
+                "GERMANY",
                 "BY",
                 "Munich",
                 "80333",
@@ -42,6 +42,7 @@ public class SnsService {
                 List.of(item),
                 address);
 
+        System.out.println("Sending storage request " + wareHouseRequest);
 
         PublishRequest publishRequest = PublishRequest.builder()
                 .message(objectMapper.writeValueAsString(wareHouseRequest))
@@ -49,6 +50,8 @@ public class SnsService {
                 .build();
 
         PublishResponse publish = snsClient.publish(publishRequest);
+
+        System.out.println("Sent storage request " +  publish);
 
         return publish.messageId();
     }

@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 public class SqsListener {
 
-    private final static String QUEUE_URL = "";
+    private final static String QUEUE_URL = "htts://sqs.eu-central-1.amazonaws.com/513616570221/burnstar-queue-real";
 
     private final SqsClient sqsClient;
 

@@ -1,5 +1,14 @@
 services:
-  managed-node:
+  managed-node-1:
+    build:
+      context: .
+      dockerfile: Dockerfile_Managed_Node
+    image: "cc-managed:latest"
+    networks:
+      - cloudcomputing
+    ports:
+      - "80"
+  managed-node-2:
     build:
       context: .
       dockerfile: Dockerfile_Managed_Node
@@ -11,10 +20,12 @@ services:
 
   ansible-node:
     image: "willhallonline/ansible:2.16.4-alpine-3.18"
+    command: ansible-playbook /root/playbooks/install-apache.yml
     networks:
       - cloudcomputing
     depends_on:
-      - managed-node
+      - managed-node-1
+      - managed-node-2
     volumes:
       - "./ansible/hosts:/etc/ansible/hosts"
       - "./playbooks:/root/playbooks"

@@ -22,7 +22,7 @@
     [
       {
         "type": "docker-tag",
-        "repository": "packer-nginx",
+        "repository": "packer-nginx-json",
         "tag": "1.0"
       }
     ]

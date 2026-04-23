@@ -23,7 +23,7 @@ build {
   }
 
   post-processor "docker-tag" {
-    repository = "packer-nginx"
-    tag        = "1.0"
+    repository = "packer-nginx-pkr-hcl"
+    tag        = ["1.0"]
   }
 }

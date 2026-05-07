@@ -20,13 +20,17 @@
 
 ### Übung 5 - Gateway
 
-- [Beschreibung](05_bonus_uebung_gateway.md)
+- [Beschreibung](05_uebung_gateway.md)
 
 ### Übung 6 - Persistent Volumes (Bonus)
 
 - [Beschreibung](06_bonus_uebung_persistent_volumes.md)
 
-### Übung 7 - Dashboard (Bonus)
+### Übung 7 - Tilt & Kustomize (Bonus)
+
+- [Beschreibung](07_bonus_tilt_kustomize.md)
+
+### Übung 8 - Dashboard (Bonus)
 
 - [Beschreibung](08_bonus_dashboard.md)
 

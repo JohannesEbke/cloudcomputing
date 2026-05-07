@@ -18,9 +18,9 @@
 
 - [Beschreibung](04_uebung_config_maps.md)
 
-### Übung 5 - Ingress
+### Übung 5 - Gateway
 
-- [Beschreibung](05_bonus_uebung_ingress.md)
+- [Beschreibung](05_bonus_uebung_gateway.md)
 
 ### Übung 6 - Persistent Volumes (Bonus)
 

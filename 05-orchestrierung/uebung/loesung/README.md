@@ -21,10 +21,10 @@
 - [Angepasste deployment.yaml](04_loesungen_config_maps/01_deployment.yaml)
 - [config.yaml](04_loesungen_config_maps/03_config.yaml)
 
-### Lösung Übung 5 - Ingress
+### Lösung Übung 5 - Gateway
 
-- [Beschreibung](05_loesung_ingress/05_loesung_ingress.md)
-- [ingress.yaml](05_loesung_ingress/04_ingress.yaml)
+- [Beschreibung](05_loesung_gateway/05_loesung_gateway.md)
+- [gateway.yaml](05_loesung_gateway/05_gateway.yaml)
 
 ### Lösung Übung 6 - Persistent Volumes (Bonus)
 

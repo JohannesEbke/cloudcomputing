@@ -9,7 +9,7 @@ Aufgaben:
 1. Installieren oder konfigurieren Sie ein Kubernetes-Cluster. Nutzen Sie dazu *eine* der folgenden Varianten:
    * Möglichkeit 1: Installieren Sie [kind](https://kind.sigs.k8s.io/)
    * Möglichkeit 2: Melden Sie sich am [kube07](https://kube.cs.hm.edu/) an, erzeugen Sie einen Cluster und laden Sie die kubeconfig herunter.
-   * Möglichkeit 3: Falls sie schon Docker Desktop oder Podman Desktop installiert haben, aktivieren Sie das eingebaute Kubernetes in den Einstellungen.
+   * Möglichkeit 3: Falls sie schon Docker Desktop, Rancher Desktop oder Podman Desktop installiert haben, aktivieren Sie das eingebaute Kubernetes in den Einstellungen.
    * Möglichkeit 4: Nutzen sie ggf. das online Tool [Killercoda](https://killercoda.com/playgrounds).
 2. Prüfen Sie, ob der Cluster online ist:
    ```shell
